@@ -1,0 +1,308 @@
+
+---
+title: "PBD Assignment 01"
+author: "Md Mobashir Rahman (mdra00001@stud.uni-saarland.de)"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  pdf_document:
+    toc: false
+    number_sections: true
+    latex_engine: pdflatex
+    keep_tex: true
+geometry: margin=1in
+fontsize: 11pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+echo = TRUE,
+warning = FALSE,
+message = FALSE,
+fig.align = "center",
+fig.width = 6,
+fig.height = 4
+)
+```
+
+
+# Principal Component Analysis (PCA) and Data Imputation
+## Exercise: Principal Component Analysis (40 points)
+
+Write a program that applies the PCA technique to the toy dataset in the supplement (“pca toy.txt”).
+
+**-> (a): **<br>**Standardize the variables in the dataset. Why is this step necessary before performing a PCA?**
+
+#### (a) Standardize the variables before running PCA
+
+Answer: We first load the toy dataset and standardize each variable to have mean 0 and standard deviation 1. Standardization is necessary so that variables measured on different scales contribute equally to the principal components; otherwise, variables with larger variances would dominate the PCA solution.
+
+```{r pca_load_standardize}
+pca_raw <- read.delim("Assignment_1_supplement/pca_toy.txt", check.names = FALSE)
+pca_scaled <- scale(pca_raw)
+pca_summary <- data.frame(
+  variable = colnames(pca_raw),
+  mean = apply(pca_scaled, 2, mean),
+  sd = apply(pca_scaled, 2, sd)
+)
+pca_summary
+```
+
+**-> (b): **<br>**Create a scatter plot from the transformed data, with PC1 and PC2 as the axes.**
+
+#### (b) Run PCA and create a scatter plot of PC1 vs PC2
+
+Answer: We compute the PCA on standardized variables and plot the scores on PC1 vs PC2.
+
+```{r pca_run}
+pca_model <- prcomp(pca_scaled, center = FALSE, scale. = FALSE)
+pca_scores <- as.data.frame(pca_model$x[, 1:2])
+```
+
+```{r pca_scatter_plot, fig.width=6, fig.height=4}
+plot(
+  pca_scores$PC1,
+  pca_scores$PC2,
+  xlab = "PC1",
+  ylab = "PC2",
+  main = "PCA of Toy Dataset: PC1 vs PC2 Scores (Standardized Data)",
+  pch = 19,
+  col = "steelblue"
+)
+grid()
+```
+
+**-> (c): **<br>**Which variables are the most important for PC1 and PC2? Why?**
+
+#### (c) Identify the most important variables for PC1 and PC2
+
+Answer: We examine the loadings (i.e., the coefficients of the eigenvectors) for PC1 and PC2. Variables with larger absolute loadings contribute more to the corresponding component.
+
+```{r pca_loadings}
+pca_loadings <- pca_model$rotation[, 1:2]
+pca_loadings
+```
+
+From the loadings we can identify the variables with the largest absolute values for each component. PC1 is most influenced by `r paste(names(sort(abs(pca_loadings[, "PC1"]), decreasing = TRUE)[1:2]), collapse = " and ")`, while PC2 is most influenced by `r paste(names(sort(abs(pca_loadings[, "PC2"]), decreasing = TRUE)[1:2]), collapse = " and ")`. These variables have the highest leverage in shaping the corresponding components.
+
+**-> (d) :**<br>**What percentage of the variance in the dataset is explained by PC1 and PC2?**
+
+#### (d) Determine the variance explained by PC1 and PC2
+
+Answer: We compute the proportion of variance explained by each principal component and report the first two.
+
+```{r pca_variance}
+importance_table <- summary(pca_model)$importance
+importance_table
+```
+
+PC1 and PC2 together explain `r round(100 * sum(importance_table["Proportion of Variance", 1:2]), 2)`% of the variance in the standardized dataset.
+
+**-> (e): **<br>**Under what circumstances would more PCs be considered?**
+
+#### (e) When to consider more principal components
+
+Answer: We would consider additional principal components if the first two components do not capture a sufficient proportion of the total variance for the analysis goals, or if later components reveal important structure or patterns (e.g., clustering) relevant to the research question. Scree plots, cumulative variance thresholds (such as 80%–90%), or domain knowledge about necessary detail can guide this decision.
+
+## Exercise: Data Imputation (60 points)
+### 1) Imputation based on a given data distribution (30 points)
+
+**-> (a): **<br>**Write a function that imputes missing values by sampling from a normal distribution whose mean comes from a lower quantile of the observed data and whose standard deviation is a fraction of the observed SD.**
+
+#### (a) Implement the imputation function
+
+Answer: The function below takes a numeric vector with NAs, computes the observed mean and SD, sets the imputation mean to `qnorm(percentile, mean, sd)` (lower tail), and the imputation SD to `sd_ratio * sd`. It draws imputed values with `rnorm` and fills the missing entries.
+
+```{r impute_function}
+impute_from_distribution <- function(x, percentile = 0.05, sd_ratio = 0.5, seed = 42) {
+  if (!is.null(seed)) set.seed(seed)
+  obs <- x[!is.na(x)]
+  m <- mean(obs)
+  s <- sd(obs)
+  mu_imp <- qnorm(percentile, mean = m, sd = s)
+  sd_imp <- sd_ratio * s
+  n_miss <- sum(is.na(x))
+  imp_vals <- rnorm(n_miss, mean = mu_imp, sd = sd_imp)
+  x_imp <- x
+  x_imp[is.na(x_imp)] <- imp_vals
+  list(values = x_imp, imputed = imp_vals, mu_imp = mu_imp, sd_imp = sd_imp,
+       mean_obs = m, sd_obs = s, n_missing = n_miss)
+}
+```
+
+**-> (b): **<br>**Apply your function to the variable ctrl.1 and plot the overall sample and the imputed data similarly to Figure 1.**
+
+#### (b) Apply to ctrl.1 and produce a plot
+
+Answer: We read the dataset, impute `ctrl.1` using a lower-tail mean (`percentile = 0.05`) and a reduced spread (`sd_ratio = 0.5`), and overlay the histograms of the overall values (blue) and imputed values (red).
+
+```{r impute_apply_ctrl1}
+ms_raw <- read.delim("Assignment_1_supplement/ms_toy.txt", check.names = FALSE)
+ctrl1 <- ms_raw$ctrl.1
+sum(is.na(ctrl1))  # missing count before
+
+imp_ctrl1 <- impute_from_distribution(ctrl1, percentile = 0.05, sd_ratio = 0.5, seed = 123)
+sum(is.na(imp_ctrl1$values))  # missing count after
+```
+
+```{r impute_plot_ctrl1, fig.width=7, fig.height=4}
+all_vals <- imp_ctrl1$values
+imp_vals <- imp_ctrl1$imputed
+brks <- seq(floor(min(all_vals)), ceiling(max(all_vals)), length.out = 60)
+
+hist(all_vals,
+     breaks = brks,
+     col = rgb(0, 0, 1, 0.7), border = NA,
+     main = "Imputation for ctrl.1: Overall (Blue) vs Imputed (Red)",
+     xlab = "Intensity")
+hist(imp_vals,
+     breaks = brks,
+     col = rgb(1, 0, 0, 0.7), border = NA,
+     add = TRUE)
+legend("topright", inset = 0.02,
+       legend = c("Overall (after imputation)", "Imputed only"),
+       fill = c(rgb(0, 0, 1, 0.7), rgb(1, 0, 0, 0.7)), border = NA, cex = 0.8)
+grid()
+```
+
+```{r impute_params_summary}
+data.frame(
+  observed_mean = round(imp_ctrl1$mean_obs, 3),
+  observed_sd = round(imp_ctrl1$sd_obs, 3),
+  imputed_mean = round(imp_ctrl1$mu_imp, 3),
+  imputed_sd = round(imp_ctrl1$sd_imp, 3),
+  n_missing = imp_ctrl1$n_missing
+)
+```
+
+**-> (c): **<br>**What is the effect of changing the percentile parameter in Step 2 and the ratio parameter in Step 3?**
+
+#### (c) Parameter effects
+
+Answer: Lower percentiles move the imputed mean further into the left tail (smaller values), while larger percentiles shift imputed values upward. Smaller SD ratios produce a tighter imputed distribution (less spread), while larger ratios widen it. The table shows the imputation mean and SD for several settings.
+
+```{r impute_param_effects}
+percentiles <- c(0.01, 0.05, 0.10)
+ratios <- c(0.2, 0.4, 0.6)
+out <- list()
+for (p in percentiles) {
+  for (r in ratios) {
+    tmp <- impute_from_distribution(ctrl1, percentile = p, sd_ratio = r, seed = 123)
+    out[[length(out) + 1]] <- data.frame(
+      percentile = p,
+      sd_ratio = r,
+      imputed_mean = tmp$mu_imp,
+      imputed_sd = tmp$sd_imp
+    )
+  }
+}
+do.call(rbind, out)
+```
+
+**-> (d): **<br>**Which configuration of parameters is the most logical/desirable?**
+
+#### (d) Recommended configuration
+
+Answer: For left-censored proteomics data, a small lower-tail percentile (e.g., 1%–5%) and a moderate SD ratio (e.g., 0.3–0.5) are often desirable: they place imputed values plausibly below the bulk of observed intensities while avoiding unrealistically large spread. The exact choice should reflect instrument sensitivity and domain knowledge; here we use `percentile = 0.05` and `sd_ratio = 0.5` to simulate low-expression values below detection while maintaining reasonable variability.
+
+### 2) k-Nearest Neighbor imputation (30 points)
+
+**-> (a): **<br>**Create a dataset with only ctrl.1, ctrl.2, ctrl.3; remove rows where all three are missing; then perform kNN imputation.**
+
+#### (a) Prepare control-only data and run kNN
+
+Answer: We subset the three control samples and drop rows with no information across all three controls. We then use `VIM::kNN` with `k = 5`.
+
+```{r knn_prep}
+ms_ctrl <- ms_raw[, c("ctrl.1", "ctrl.2", "ctrl.3")]
+all_three_na <- rowSums(is.na(ms_ctrl)) == ncol(ms_ctrl)
+ms_ctrl_filt <- ms_ctrl[!all_three_na, ]
+
+missing_before_ctrl1 <- sum(is.na(ms_ctrl_filt$ctrl.1))
+list(rows_after_filter = nrow(ms_ctrl_filt), missing_ctrl1_before = missing_before_ctrl1)
+```
+
+```{r knn_impute_ctrl, message=FALSE}
+if (!requireNamespace("VIM", quietly = TRUE)) {
+  stop("Package 'VIM' is required for kNN imputation. Install with install.packages('VIM').")
+}
+
+suppressPackageStartupMessages(library(VIM))
+knn_res <- VIM::kNN(ms_ctrl_filt, k = 5, imp_var = TRUE)
+
+# Extract imputed indicator and values for ctrl.1
+imp_flag_ctrl1 <- knn_res$ctrl.1_imp
+if (!is.logical(imp_flag_ctrl1)) imp_flag_ctrl1 <- as.logical(imp_flag_ctrl1)
+
+ctrl1_knn_all <- knn_res$ctrl.1
+ctrl1_knn_imp <- ctrl1_knn_all[imp_flag_ctrl1]
+
+list(
+  missing_ctrl1_after = sum(is.na(ctrl1_knn_all)),
+  imputed_count_ctrl1 = length(ctrl1_knn_imp)
+)
+```
+
+**-> (b): **<br>**Plot the imputed data for ctrl.1 similarly to Figure 1 and compare its distribution.**
+
+#### (b) Plot ctrl.1 after kNN imputation
+
+Answer: We overlay the histogram of all ctrl.1 values after kNN imputation (blue) with the histogram of imputed-only values (red).
+
+```{r knn_plot_ctrl1, fig.width=7, fig.height=4}
+brks2 <- seq(floor(min(ctrl1_knn_all)), ceiling(max(ctrl1_knn_all)), length.out = 60)
+hist(ctrl1_knn_all,
+     breaks = brks2,
+     col = rgb(0, 0, 1, 0.7), border = NA,
+     main = "kNN Imputation for ctrl.1: Overall (Blue) vs Imputed (Red)",
+     xlab = "Intensity")
+hist(ctrl1_knn_imp,
+     breaks = brks2,
+     col = rgb(1, 0, 0, 0.7), border = NA,
+     add = TRUE)
+legend("topright", inset = 0.02,
+       legend = c("Overall (after kNN)", "Imputed only (kNN)"),
+       fill = c(rgb(0, 0, 1, 0.7), rgb(1, 0, 0, 0.7)), border = NA, cex = 0.8)
+grid()
+```
+
+**-> (c): **<br>**Compare the kNN result to the distribution-based imputation in terms of mean, SD, number of values (overall and imputed-only).**
+
+#### (c) Quantitative comparison
+
+Answer: The table contrasts summary statistics for ctrl.1 using the two methods. Note: kNN uses the filtered dataset (rows where not all three controls are missing), while the distribution-based method was applied to the full dataset.
+
+```{r knn_comparison}
+compare_df <- rbind(
+  data.frame(
+    method = "Distribution",
+    n = length(imp_ctrl1$values),
+    missing_before = sum(is.na(ms_raw$ctrl.1)),
+    imputed_n = length(imp_ctrl1$imputed),
+    mean_overall = mean(imp_ctrl1$values),
+    sd_overall = sd(imp_ctrl1$values),
+    mean_imputed = mean(imp_ctrl1$imputed),
+    sd_imputed = sd(imp_ctrl1$imputed)
+  ),
+  data.frame(
+    method = "kNN",
+    n = length(ctrl1_knn_all),
+    missing_before = missing_before_ctrl1,
+    imputed_n = length(ctrl1_knn_imp),
+    mean_overall = mean(ctrl1_knn_all),
+    sd_overall = sd(ctrl1_knn_all),
+    mean_imputed = mean(ctrl1_knn_imp),
+    sd_imputed = sd(ctrl1_knn_imp)
+  )
+)
+compare_df
+```
+
+**-> (d): **<br>**What are the advantages and disadvantages of kNN imputation compared to the distribution-based approach?**
+
+#### (d) Discussion
+
+Answer: 
+- kNN advantages: leverages multivariate structure (uses similarity across ctrl.1–3), preserves local relationships and can adapt to non-Gaussian patterns; may yield more realistic values for correlated variables.
+- kNN disadvantages: requires tuning `k`; sensitive to scaling and outliers; can bias towards dense regions; depends on available neighbors (after filtering) and may be computationally heavier on large datasets.
+- Distribution-based advantages: simple, fast, controlled placement of imputed values in the lower tail to reflect left-censoring; easy to explain and reproduce.
+- Distribution-based disadvantages: ignores relationships between variables; assumes normality and chosen tail/variance; risk of under/over-dispersion if parameters are poorly chosen.

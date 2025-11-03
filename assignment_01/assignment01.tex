@@ -1,0 +1,609 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  11pt,
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={PBD Assignment 01},
+  pdfauthor={Md Mobashir Rahman (mdra00001@stud.uni-saarland.de)},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{PBD Assignment 01}
+\author{Md Mobashir Rahman
+(\href{mailto:mdra00001@stud.uni-saarland.de}{\nolinkurl{mdra00001@stud.uni-saarland.de}})}
+\date{November 03, 2025}
+
+\begin{document}
+\maketitle
+
+\section{Principal Component Analysis (PCA) and Data
+Imputation}\label{principal-component-analysis-pca-and-data-imputation}
+
+\subsection{Exercise: Principal Component Analysis (40
+points)}\label{exercise-principal-component-analysis-40-points}
+
+Write a program that applies the PCA technique to the toy dataset in the
+supplement (``pca toy.txt'').
+
+\textbf{-\textgreater{} (a): }\textbf{Standardize the variables in the
+dataset. Why is this step necessary before performing a PCA?}
+
+\paragraph{(a) Standardize the variables before running
+PCA}\label{a-standardize-the-variables-before-running-pca}
+
+Answer: We first load the toy dataset and standardize each variable to
+have mean 0 and standard deviation 1. Standardization is necessary so
+that variables measured on different scales contribute equally to the
+principal components; otherwise, variables with larger variances would
+dominate the PCA solution.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pca\_raw }\OtherTok{\textless{}{-}} \FunctionTok{read.delim}\NormalTok{(}\StringTok{"Assignment\_1\_supplement/pca\_toy.txt"}\NormalTok{, }\AttributeTok{check.names =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{pca\_scaled }\OtherTok{\textless{}{-}} \FunctionTok{scale}\NormalTok{(pca\_raw)}
+\NormalTok{pca\_summary }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{variable =} \FunctionTok{colnames}\NormalTok{(pca\_raw),}
+  \AttributeTok{mean =} \FunctionTok{apply}\NormalTok{(pca\_scaled, }\DecValTok{2}\NormalTok{, mean),}
+  \AttributeTok{sd =} \FunctionTok{apply}\NormalTok{(pca\_scaled, }\DecValTok{2}\NormalTok{, sd)}
+\NormalTok{)}
+\NormalTok{pca\_summary}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   variable          mean sd
+## a        a  1.091012e-16  1
+## b        b -7.434266e-17  1
+## c        c  1.491862e-18  1
+## d        d -1.116251e-16  1
+\end{verbatim}
+
+\textbf{-\textgreater{} (b): }\textbf{Create a scatter plot from the
+transformed data, with PC1 and PC2 as the axes.}
+
+\paragraph{(b) Run PCA and create a scatter plot of PC1 vs
+PC2}\label{b-run-pca-and-create-a-scatter-plot-of-pc1-vs-pc2}
+
+Answer: We compute the PCA on standardized variables and plot the scores
+on PC1 vs PC2.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pca\_model }\OtherTok{\textless{}{-}} \FunctionTok{prcomp}\NormalTok{(pca\_scaled, }\AttributeTok{center =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{scale. =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{pca\_scores }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(pca\_model}\SpecialCharTok{$}\NormalTok{x[, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}
+\NormalTok{  pca\_scores}\SpecialCharTok{$}\NormalTok{PC1,}
+\NormalTok{  pca\_scores}\SpecialCharTok{$}\NormalTok{PC2,}
+  \AttributeTok{xlab =} \StringTok{"PC1"}\NormalTok{,}
+  \AttributeTok{ylab =} \StringTok{"PC2"}\NormalTok{,}
+  \AttributeTok{main =} \StringTok{"PCA of Toy Dataset: PC1 vs PC2 Scores (Standardized Data)"}\NormalTok{,}
+  \AttributeTok{pch =} \DecValTok{19}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"steelblue"}
+\NormalTok{)}
+\FunctionTok{grid}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{assignment01_files/figure-latex/pca_scatter_plot-1} \end{center}
+
+\textbf{-\textgreater{} (c): }\textbf{Which variables are the most
+important for PC1 and PC2? Why?}
+
+\paragraph{(c) Identify the most important variables for PC1 and
+PC2}\label{c-identify-the-most-important-variables-for-pc1-and-pc2}
+
+Answer: We examine the loadings (i.e., the coefficients of the
+eigenvectors) for PC1 and PC2. Variables with larger absolute loadings
+contribute more to the corresponding component.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pca\_loadings }\OtherTok{\textless{}{-}}\NormalTok{ pca\_model}\SpecialCharTok{$}\NormalTok{rotation[, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{]}
+\NormalTok{pca\_loadings}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          PC1        PC2
+## a -0.4357230  0.5053838
+## b -0.6113755 -0.3355008
+## c  0.2745604 -0.7132847
+## d -0.6008179 -0.3510717
+\end{verbatim}
+
+From the loadings we can identify the variables with the largest
+absolute values for each component. PC1 is most influenced by b and d,
+while PC2 is most influenced by c and a. These variables have the
+highest leverage in shaping the corresponding components.
+
+\textbf{-\textgreater{} (d) :}\textbf{What percentage of the variance in
+the dataset is explained by PC1 and PC2?}
+
+\paragraph{(d) Determine the variance explained by PC1 and
+PC2}\label{d-determine-the-variance-explained-by-pc1-and-pc2}
+
+Answer: We compute the proportion of variance explained by each
+principal component and report the first two.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{importance\_table }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(pca\_model)}\SpecialCharTok{$}\NormalTok{importance}
+\NormalTok{importance\_table}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                            PC1      PC2       PC3       PC4
+## Standard deviation     1.47734 1.116475 0.6980192 0.2893467
+## Proportion of Variance 0.54563 0.311630 0.1218100 0.0209300
+## Cumulative Proportion  0.54563 0.857260 0.9790700 1.0000000
+\end{verbatim}
+
+PC1 and PC2 together explain 85.73\% of the variance in the standardized
+dataset.
+
+\textbf{-\textgreater{} (e): }\textbf{Under what circumstances would
+more PCs be considered?}
+
+\paragraph{(e) When to consider more principal
+components}\label{e-when-to-consider-more-principal-components}
+
+Answer: We would consider additional principal components if the first
+two components do not capture a sufficient proportion of the total
+variance for the analysis goals, or if later components reveal important
+structure or patterns (e.g., clustering) relevant to the research
+question. Scree plots, cumulative variance thresholds (such as
+80\%--90\%), or domain knowledge about necessary detail can guide this
+decision.
+
+\subsection{Exercise: Data Imputation (60
+points)}\label{exercise-data-imputation-60-points}
+
+\subsubsection{1) Imputation based on a given data distribution (30
+points)}\label{imputation-based-on-a-given-data-distribution-30-points}
+
+\textbf{-\textgreater{} (a): }\textbf{Write a function that imputes
+missing values by sampling from a normal distribution whose mean comes
+from a lower quantile of the observed data and whose standard deviation
+is a fraction of the observed SD.}
+
+\paragraph{(a) Implement the imputation
+function}\label{a-implement-the-imputation-function}
+
+Answer: The function below takes a numeric vector with NAs, computes the
+observed mean and SD, sets the imputation mean to
+\texttt{qnorm(percentile,\ mean,\ sd)} (lower tail), and the imputation
+SD to \texttt{sd\_ratio\ *\ sd}. It draws imputed values with
+\texttt{rnorm} and fills the missing entries.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{impute\_from\_distribution }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{percentile =} \FloatTok{0.05}\NormalTok{, }\AttributeTok{sd\_ratio =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{seed =} \DecValTok{42}\NormalTok{) \{}
+  \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{is.null}\NormalTok{(seed)) }\FunctionTok{set.seed}\NormalTok{(seed)}
+\NormalTok{  obs }\OtherTok{\textless{}{-}}\NormalTok{ x[}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(x)]}
+\NormalTok{  m }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(obs)}
+\NormalTok{  s }\OtherTok{\textless{}{-}} \FunctionTok{sd}\NormalTok{(obs)}
+\NormalTok{  mu\_imp }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(percentile, }\AttributeTok{mean =}\NormalTok{ m, }\AttributeTok{sd =}\NormalTok{ s)}
+\NormalTok{  sd\_imp }\OtherTok{\textless{}{-}}\NormalTok{ sd\_ratio }\SpecialCharTok{*}\NormalTok{ s}
+\NormalTok{  n\_miss }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(x))}
+\NormalTok{  imp\_vals }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(n\_miss, }\AttributeTok{mean =}\NormalTok{ mu\_imp, }\AttributeTok{sd =}\NormalTok{ sd\_imp)}
+\NormalTok{  x\_imp }\OtherTok{\textless{}{-}}\NormalTok{ x}
+\NormalTok{  x\_imp[}\FunctionTok{is.na}\NormalTok{(x\_imp)] }\OtherTok{\textless{}{-}}\NormalTok{ imp\_vals}
+  \FunctionTok{list}\NormalTok{(}\AttributeTok{values =}\NormalTok{ x\_imp, }\AttributeTok{imputed =}\NormalTok{ imp\_vals, }\AttributeTok{mu\_imp =}\NormalTok{ mu\_imp, }\AttributeTok{sd\_imp =}\NormalTok{ sd\_imp,}
+       \AttributeTok{mean\_obs =}\NormalTok{ m, }\AttributeTok{sd\_obs =}\NormalTok{ s, }\AttributeTok{n\_missing =}\NormalTok{ n\_miss)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{-\textgreater{} (b): }\textbf{Apply your function to the
+variable ctrl.1 and plot the overall sample and the imputed data
+similarly to Figure 1.}
+
+\paragraph{(b) Apply to ctrl.1 and produce a
+plot}\label{b-apply-to-ctrl.1-and-produce-a-plot}
+
+Answer: We read the dataset, impute \texttt{ctrl.1} using a lower-tail
+mean (\texttt{percentile\ =\ 0.05}) and a reduced spread
+(\texttt{sd\_ratio\ =\ 0.5}), and overlay the histograms of the overall
+values (blue) and imputed values (red).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ms\_raw }\OtherTok{\textless{}{-}} \FunctionTok{read.delim}\NormalTok{(}\StringTok{"Assignment\_1\_supplement/ms\_toy.txt"}\NormalTok{, }\AttributeTok{check.names =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{ctrl1 }\OtherTok{\textless{}{-}}\NormalTok{ ms\_raw}\SpecialCharTok{$}\NormalTok{ctrl}\FloatTok{.1}
+\FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(ctrl1))  }\CommentTok{\# missing count before}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 587
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{imp\_ctrl1 }\OtherTok{\textless{}{-}} \FunctionTok{impute\_from\_distribution}\NormalTok{(ctrl1, }\AttributeTok{percentile =} \FloatTok{0.05}\NormalTok{, }\AttributeTok{sd\_ratio =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{seed =} \DecValTok{123}\NormalTok{)}
+\FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{values))  }\CommentTok{\# missing count after}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all\_vals }\OtherTok{\textless{}{-}}\NormalTok{ imp\_ctrl1}\SpecialCharTok{$}\NormalTok{values}
+\NormalTok{imp\_vals }\OtherTok{\textless{}{-}}\NormalTok{ imp\_ctrl1}\SpecialCharTok{$}\NormalTok{imputed}
+\NormalTok{brks }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{floor}\NormalTok{(}\FunctionTok{min}\NormalTok{(all\_vals)), }\FunctionTok{ceiling}\NormalTok{(}\FunctionTok{max}\NormalTok{(all\_vals)), }\AttributeTok{length.out =} \DecValTok{60}\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(all\_vals,}
+     \AttributeTok{breaks =}\NormalTok{ brks,}
+     \AttributeTok{col =} \FunctionTok{rgb}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\FloatTok{0.7}\NormalTok{), }\AttributeTok{border =} \ConstantTok{NA}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Imputation for ctrl.1: Overall (Blue) vs Imputed (Red)"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Intensity"}\NormalTok{)}
+\FunctionTok{hist}\NormalTok{(imp\_vals,}
+     \AttributeTok{breaks =}\NormalTok{ brks,}
+     \AttributeTok{col =} \FunctionTok{rgb}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\FloatTok{0.7}\NormalTok{), }\AttributeTok{border =} \ConstantTok{NA}\NormalTok{,}
+     \AttributeTok{add =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{inset =} \FloatTok{0.02}\NormalTok{,}
+       \AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"Overall (after imputation)"}\NormalTok{, }\StringTok{"Imputed only"}\NormalTok{),}
+       \AttributeTok{fill =} \FunctionTok{c}\NormalTok{(}\FunctionTok{rgb}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\FloatTok{0.7}\NormalTok{), }\FunctionTok{rgb}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\FloatTok{0.7}\NormalTok{)), }\AttributeTok{border =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{cex =} \FloatTok{0.8}\NormalTok{)}
+\FunctionTok{grid}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{assignment01_files/figure-latex/impute_plot_ctrl1-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{observed\_mean =} \FunctionTok{round}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{mean\_obs, }\DecValTok{3}\NormalTok{),}
+  \AttributeTok{observed\_sd =} \FunctionTok{round}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{sd\_obs, }\DecValTok{3}\NormalTok{),}
+  \AttributeTok{imputed\_mean =} \FunctionTok{round}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{mu\_imp, }\DecValTok{3}\NormalTok{),}
+  \AttributeTok{imputed\_sd =} \FunctionTok{round}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{sd\_imp, }\DecValTok{3}\NormalTok{),}
+  \AttributeTok{n\_missing =}\NormalTok{ imp\_ctrl1}\SpecialCharTok{$}\NormalTok{n\_missing}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   observed_mean observed_sd imputed_mean imputed_sd n_missing
+## 1        29.036       2.739       24.531       1.37       587
+\end{verbatim}
+
+\textbf{-\textgreater{} (c): }\textbf{What is the effect of changing the
+percentile parameter in Step 2 and the ratio parameter in Step 3?}
+
+\paragraph{(c) Parameter effects}\label{c-parameter-effects}
+
+Answer: Lower percentiles move the imputed mean further into the left
+tail (smaller values), while larger percentiles shift imputed values
+upward. Smaller SD ratios produce a tighter imputed distribution (less
+spread), while larger ratios widen it. The table shows the imputation
+mean and SD for several settings.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{percentiles }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.01}\NormalTok{, }\FloatTok{0.05}\NormalTok{, }\FloatTok{0.10}\NormalTok{)}
+\NormalTok{ratios }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.2}\NormalTok{, }\FloatTok{0.4}\NormalTok{, }\FloatTok{0.6}\NormalTok{)}
+\NormalTok{out }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
+\ControlFlowTok{for}\NormalTok{ (p }\ControlFlowTok{in}\NormalTok{ percentiles) \{}
+  \ControlFlowTok{for}\NormalTok{ (r }\ControlFlowTok{in}\NormalTok{ ratios) \{}
+\NormalTok{    tmp }\OtherTok{\textless{}{-}} \FunctionTok{impute\_from\_distribution}\NormalTok{(ctrl1, }\AttributeTok{percentile =}\NormalTok{ p, }\AttributeTok{sd\_ratio =}\NormalTok{ r, }\AttributeTok{seed =} \DecValTok{123}\NormalTok{)}
+\NormalTok{    out[[}\FunctionTok{length}\NormalTok{(out) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{]] }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+      \AttributeTok{percentile =}\NormalTok{ p,}
+      \AttributeTok{sd\_ratio =}\NormalTok{ r,}
+      \AttributeTok{imputed\_mean =}\NormalTok{ tmp}\SpecialCharTok{$}\NormalTok{mu\_imp,}
+      \AttributeTok{imputed\_sd =}\NormalTok{ tmp}\SpecialCharTok{$}\NormalTok{sd\_imp}
+\NormalTok{    )}
+\NormalTok{  \}}
+\NormalTok{\}}
+\FunctionTok{do.call}\NormalTok{(rbind, out)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   percentile sd_ratio imputed_mean imputed_sd
+## 1       0.01      0.2     22.66407  0.5478088
+## 2       0.01      0.4     22.66407  1.0956176
+## 3       0.01      0.6     22.66407  1.6434264
+## 4       0.05      0.2     24.53071  0.5478088
+## 5       0.05      0.4     24.53071  1.0956176
+## 6       0.05      0.6     24.53071  1.6434264
+## 7       0.10      0.2     25.52581  0.5478088
+## 8       0.10      0.4     25.52581  1.0956176
+## 9       0.10      0.6     25.52581  1.6434264
+\end{verbatim}
+
+\textbf{-\textgreater{} (d): }\textbf{Which configuration of parameters
+is the most logical/desirable?}
+
+\paragraph{(d) Recommended
+configuration}\label{d-recommended-configuration}
+
+Answer: For left-censored proteomics data, a small lower-tail percentile
+(e.g., 1\%--5\%) and a moderate SD ratio (e.g., 0.3--0.5) are often
+desirable: they place imputed values plausibly below the bulk of
+observed intensities while avoiding unrealistically large spread. The
+exact choice should reflect instrument sensitivity and domain knowledge;
+here we use \texttt{percentile\ =\ 0.05} and \texttt{sd\_ratio\ =\ 0.5}
+to simulate low-expression values below detection while maintaining
+reasonable variability.
+
+\subsubsection{2) k-Nearest Neighbor imputation (30
+points)}\label{k-nearest-neighbor-imputation-30-points}
+
+\textbf{-\textgreater{} (a): }\textbf{Create a dataset with only ctrl.1,
+ctrl.2, ctrl.3; remove rows where all three are missing; then perform
+kNN imputation.}
+
+\paragraph{(a) Prepare control-only data and run
+kNN}\label{a-prepare-control-only-data-and-run-knn}
+
+Answer: We subset the three control samples and drop rows with no
+information across all three controls. We then use \texttt{VIM::kNN}
+with \texttt{k\ =\ 5}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ms\_ctrl }\OtherTok{\textless{}{-}}\NormalTok{ ms\_raw[, }\FunctionTok{c}\NormalTok{(}\StringTok{"ctrl.1"}\NormalTok{, }\StringTok{"ctrl.2"}\NormalTok{, }\StringTok{"ctrl.3"}\NormalTok{)]}
+\NormalTok{all\_three\_na }\OtherTok{\textless{}{-}} \FunctionTok{rowSums}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(ms\_ctrl)) }\SpecialCharTok{==} \FunctionTok{ncol}\NormalTok{(ms\_ctrl)}
+\NormalTok{ms\_ctrl\_filt }\OtherTok{\textless{}{-}}\NormalTok{ ms\_ctrl[}\SpecialCharTok{!}\NormalTok{all\_three\_na, ]}
+
+\NormalTok{missing\_before\_ctrl1 }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(ms\_ctrl\_filt}\SpecialCharTok{$}\NormalTok{ctrl}\FloatTok{.1}\NormalTok{))}
+\FunctionTok{list}\NormalTok{(}\AttributeTok{rows\_after\_filter =} \FunctionTok{nrow}\NormalTok{(ms\_ctrl\_filt), }\AttributeTok{missing\_ctrl1\_before =}\NormalTok{ missing\_before\_ctrl1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $rows_after_filter
+## [1] 6733
+## 
+## $missing_ctrl1_before
+## [1] 360
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"VIM"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)) \{}
+  \FunctionTok{stop}\NormalTok{(}\StringTok{"Package \textquotesingle{}VIM\textquotesingle{} is required for kNN imputation. Install with install.packages(\textquotesingle{}VIM\textquotesingle{})."}\NormalTok{)}
+\NormalTok{\}}
+
+\FunctionTok{suppressPackageStartupMessages}\NormalTok{(}\FunctionTok{library}\NormalTok{(VIM))}
+\NormalTok{knn\_res }\OtherTok{\textless{}{-}}\NormalTok{ VIM}\SpecialCharTok{::}\FunctionTok{kNN}\NormalTok{(ms\_ctrl\_filt, }\AttributeTok{k =} \DecValTok{5}\NormalTok{, }\AttributeTok{imp\_var =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   ctrl.2   ctrl.3   ctrl.2   ctrl.3 
+## 20.81706 21.49453 38.01899 37.98120 
+##   ctrl.1   ctrl.3   ctrl.1   ctrl.3 
+## 21.38068 21.49453 37.88927 37.98120 
+##   ctrl.1   ctrl.2   ctrl.1   ctrl.2 
+## 21.38068 20.81706 37.88927 38.01899
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extract imputed indicator and values for ctrl.1}
+\NormalTok{imp\_flag\_ctrl1 }\OtherTok{\textless{}{-}}\NormalTok{ knn\_res}\SpecialCharTok{$}\NormalTok{ctrl}\FloatTok{.1}\NormalTok{\_imp}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{is.logical}\NormalTok{(imp\_flag\_ctrl1)) imp\_flag\_ctrl1 }\OtherTok{\textless{}{-}} \FunctionTok{as.logical}\NormalTok{(imp\_flag\_ctrl1)}
+
+\NormalTok{ctrl1\_knn\_all }\OtherTok{\textless{}{-}}\NormalTok{ knn\_res}\SpecialCharTok{$}\NormalTok{ctrl}\FloatTok{.1}
+\NormalTok{ctrl1\_knn\_imp }\OtherTok{\textless{}{-}}\NormalTok{ ctrl1\_knn\_all[imp\_flag\_ctrl1]}
+
+\FunctionTok{list}\NormalTok{(}
+  \AttributeTok{missing\_ctrl1\_after =} \FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(ctrl1\_knn\_all)),}
+  \AttributeTok{imputed\_count\_ctrl1 =} \FunctionTok{length}\NormalTok{(ctrl1\_knn\_imp)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $missing_ctrl1_after
+## [1] 0
+## 
+## $imputed_count_ctrl1
+## [1] 360
+\end{verbatim}
+
+\textbf{-\textgreater{} (b): }\textbf{Plot the imputed data for ctrl.1
+similarly to Figure 1 and compare its distribution.}
+
+\paragraph{(b) Plot ctrl.1 after kNN
+imputation}\label{b-plot-ctrl.1-after-knn-imputation}
+
+Answer: We overlay the histogram of all ctrl.1 values after kNN
+imputation (blue) with the histogram of imputed-only values (red).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{brks2 }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{floor}\NormalTok{(}\FunctionTok{min}\NormalTok{(ctrl1\_knn\_all)), }\FunctionTok{ceiling}\NormalTok{(}\FunctionTok{max}\NormalTok{(ctrl1\_knn\_all)), }\AttributeTok{length.out =} \DecValTok{60}\NormalTok{)}
+\FunctionTok{hist}\NormalTok{(ctrl1\_knn\_all,}
+     \AttributeTok{breaks =}\NormalTok{ brks2,}
+     \AttributeTok{col =} \FunctionTok{rgb}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\FloatTok{0.7}\NormalTok{), }\AttributeTok{border =} \ConstantTok{NA}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"kNN Imputation for ctrl.1: Overall (Blue) vs Imputed (Red)"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Intensity"}\NormalTok{)}
+\FunctionTok{hist}\NormalTok{(ctrl1\_knn\_imp,}
+     \AttributeTok{breaks =}\NormalTok{ brks2,}
+     \AttributeTok{col =} \FunctionTok{rgb}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\FloatTok{0.7}\NormalTok{), }\AttributeTok{border =} \ConstantTok{NA}\NormalTok{,}
+     \AttributeTok{add =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{inset =} \FloatTok{0.02}\NormalTok{,}
+       \AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"Overall (after kNN)"}\NormalTok{, }\StringTok{"Imputed only (kNN)"}\NormalTok{),}
+       \AttributeTok{fill =} \FunctionTok{c}\NormalTok{(}\FunctionTok{rgb}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\FloatTok{0.7}\NormalTok{), }\FunctionTok{rgb}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\FloatTok{0.7}\NormalTok{)), }\AttributeTok{border =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{cex =} \FloatTok{0.8}\NormalTok{)}
+\FunctionTok{grid}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{assignment01_files/figure-latex/knn_plot_ctrl1-1} \end{center}
+
+\textbf{-\textgreater{} (c): }\textbf{Compare the kNN result to the
+distribution-based imputation in terms of mean, SD, number of values
+(overall and imputed-only).}
+
+\paragraph{(c) Quantitative comparison}\label{c-quantitative-comparison}
+
+Answer: The table contrasts summary statistics for ctrl.1 using the two
+methods. Note: kNN uses the filtered dataset (rows where not all three
+controls are missing), while the distribution-based method was applied
+to the full dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{compare\_df }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(}
+  \FunctionTok{data.frame}\NormalTok{(}
+    \AttributeTok{method =} \StringTok{"Distribution"}\NormalTok{,}
+    \AttributeTok{n =} \FunctionTok{length}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{values),}
+    \AttributeTok{missing\_before =} \FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(ms\_raw}\SpecialCharTok{$}\NormalTok{ctrl}\FloatTok{.1}\NormalTok{)),}
+    \AttributeTok{imputed\_n =} \FunctionTok{length}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{imputed),}
+    \AttributeTok{mean\_overall =} \FunctionTok{mean}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{values),}
+    \AttributeTok{sd\_overall =} \FunctionTok{sd}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{values),}
+    \AttributeTok{mean\_imputed =} \FunctionTok{mean}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{imputed),}
+    \AttributeTok{sd\_imputed =} \FunctionTok{sd}\NormalTok{(imp\_ctrl1}\SpecialCharTok{$}\NormalTok{imputed)}
+\NormalTok{  ),}
+  \FunctionTok{data.frame}\NormalTok{(}
+    \AttributeTok{method =} \StringTok{"kNN"}\NormalTok{,}
+    \AttributeTok{n =} \FunctionTok{length}\NormalTok{(ctrl1\_knn\_all),}
+    \AttributeTok{missing\_before =}\NormalTok{ missing\_before\_ctrl1,}
+    \AttributeTok{imputed\_n =} \FunctionTok{length}\NormalTok{(ctrl1\_knn\_imp),}
+    \AttributeTok{mean\_overall =} \FunctionTok{mean}\NormalTok{(ctrl1\_knn\_all),}
+    \AttributeTok{sd\_overall =} \FunctionTok{sd}\NormalTok{(ctrl1\_knn\_all),}
+    \AttributeTok{mean\_imputed =} \FunctionTok{mean}\NormalTok{(ctrl1\_knn\_imp),}
+    \AttributeTok{sd\_imputed =} \FunctionTok{sd}\NormalTok{(ctrl1\_knn\_imp)}
+\NormalTok{  )}
+\NormalTok{)}
+\NormalTok{compare\_df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         method    n missing_before imputed_n mean_overall sd_overall
+## 1 Distribution 6960            587       587     28.65922   2.925119
+## 2          kNN 6733            360       360     28.81819   2.832218
+##   mean_imputed sd_imputed
+## 1     24.56816   1.312180
+## 2     24.96160   1.224823
+\end{verbatim}
+
+\textbf{-\textgreater{} (d): }\textbf{What are the advantages and
+disadvantages of kNN imputation compared to the distribution-based
+approach?}
+
+\paragraph{(d) Discussion}\label{d-discussion}
+
+Answer: - kNN advantages: leverages multivariate structure (uses
+similarity across ctrl.1--3), preserves local relationships and can
+adapt to non-Gaussian patterns; may yield more realistic values for
+correlated variables. - kNN disadvantages: requires tuning \texttt{k};
+sensitive to scaling and outliers; can bias towards dense regions;
+depends on available neighbors (after filtering) and may be
+computationally heavier on large datasets. - Distribution-based
+advantages: simple, fast, controlled placement of imputed values in the
+lower tail to reflect left-censoring; easy to explain and reproduce. -
+Distribution-based disadvantages: ignores relationships between
+variables; assumes normality and chosen tail/variance; risk of
+under/over-dispersion if parameters are poorly chosen.
+
+\end{document}
