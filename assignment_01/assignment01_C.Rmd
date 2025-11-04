@@ -1,0 +1,427 @@
+
+---
+title: "PBD Assignment 01"
+author: "Md Mobashir Rahman and Adwitiya Argha Priyadarshini Boruah"
+email: "mdra00001@stud.uni-saarland.de, adbo00002@stud.uni-saarland.de"
+matriculation_number1: "7059086, 7070291"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  pdf_document:
+    toc: false
+    number_sections: true
+    latex_engine: pdflatex
+    keep_tex: true
+geometry: margin=1in
+fontsize: 11pt
+---
+\fbox{
+\begin{minipage}{0.9\textwidth}
+\textbf{Author:} `r rmarkdown::metadata$author` \\
+\textbf{Email:} `r rmarkdown::metadata$email` \\
+\textbf{Matriculation Number:} `r rmarkdown::metadata$matriculation_number`
+\end{minipage}
+}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+echo = TRUE,
+warning = FALSE,
+message = FALSE,
+fig.align = "center",
+fig.width = 6,
+fig.height = 4
+)
+```
+
+
+# Principal Component Analysis (PCA) and Data Imputation
+## Exercise: Principal Component Analysis (40 points)
+
+Write a program that applies the PCA technique to the toy dataset in the supplement (“pca toy.txt”).
+
+**-> (a): **<br>**Standardize the variables in the dataset. Why is this step necessary before performing a PCA?**
+
+### (a) Standardize the variables before running PCA: 
+
+We first load the toy dataset and standardize each variable to have mean 0 and standard deviation 1. Standardization is necessary so that variables measured on different scales contribute equally to the principal components; otherwise, variables with larger variances would dominate the PCA solution.
+
+```{r pca_load_standardize}
+pca_raw <- read.delim("Assignment_1_supplement/pca_toy.txt", check.names = FALSE)
+pca_scaled <- scale(pca_raw)
+pca_summary <- data.frame(
+  variable = colnames(pca_raw),
+  mean = apply(pca_scaled, 2, mean),
+  sd = apply(pca_scaled, 2, sd)
+)
+pca_summary
+```
+
+**Observation**: Column means are ~0 and SDs are 1 (tiny numerical noise is expected).
+
+**-> (b): **<br>**Create a scatter plot from the transformed data, with PC1 and PC2 as the axes.**
+
+### (b) Run PCA and create a scatter plot of PC1 vs PC2:
+
+We compute the PCA on standardized variables and plot the scores on PC1 vs PC2.
+
+```{r pca_run}
+pca_model <- prcomp(pca_scaled, center = FALSE, scale. = FALSE)
+pca_scores <- as.data.frame(pca_model$x[, 1:2])
+```
+
+```{r pca_scatter_plot, fig.width=6, fig.height=4}
+plot(
+  pca_scores$PC1,
+  pca_scores$PC2,
+  xlab = "PC1",
+  ylab = "PC2",
+  main = "PCA of Toy Dataset: PC1 vs PC2 Scores (Standardized Data)",
+  pch = 19,
+  col = "steelblue"
+)
+grid()
+```
+
+**-> (c): **<br>**Which variables are the most important for PC1 and PC2? Why?**
+
+### (c) Identify the most important variables for PC1 and PC2:
+
+We examine the loadings (i.e., the coefficients of the eigenvectors) for PC1 and PC2. Variables with larger absolute loadings contribute more to the corresponding component.
+
+```{r pca_loadings}
+pca_loadings <- pca_model$rotation[, 1:2]
+pca_loadings
+```
+
+From the loadings we can identify the variables with the largest absolute values for each component. PC1 is most influenced by `r paste(names(sort(abs(pca_loadings[, "PC1"]), decreasing = TRUE)[1:2]), collapse = " and ")`, while PC2 is most influenced by `r paste(names(sort(abs(pca_loadings[, "PC2"]), decreasing = TRUE)[1:2]), collapse = " and ")`. These variables have the highest leverage in shaping the corresponding components.
+
+**-> (d) :**<br>**What percentage of the variance in the dataset is explained by PC1 and PC2?**
+
+### (d) Determine the variance explained by PC1 and PC2:
+
+We compute the proportion of variance explained by each principal component and report the first two.
+
+```{r pca_variance}
+importance_table <- summary(pca_model)$importance
+importance_table
+```
+
+PC1 and PC2 together explain `r round(100 * sum(importance_table["Proportion of Variance", 1:2]), 2)`% of the variance in the standardized dataset.
+
+**-> (e): **<br>**Under what circumstances would more PCs be considered?**
+
+### (e) When to consider more principal components:
+
+We would consider additional principal components if the first two components do not capture a sufficient proportion of the total variance for the analysis goals, or if later components reveal important structure or patterns (e.g., clustering) relevant to the research question. Scree plots, cumulative variance thresholds (such as 80%–90%), or domain knowledge about necessary detail can guide this decision.
+
+## Exercise: Data Imputation (60 points)
+
+Data imputation techniques can be used to fill out missing data in sparse dataframes. Here, we will try to generate missing entries in a proteomics dataset (”ms toy.txt”) that were below the detection limit for expression data. Missing values are denoted as ”NA”.
+
+### 1) Imputation based on a given data distribution (30 points)
+
+**-> (a): **<br>**Write a function that imputes missing values by sampling from a normal distribution whose mean comes from a lower quantile of the observed data and whose standard deviation is a fraction of the observed SD.**
+
+#### (a) Implement the imputation function:
+
+The function below takes a numeric vector with NAs, computes the observed mean and SD, sets the imputation mean to `qnorm(percentile, mean, sd)` (lower tail), and the imputation SD to `sd_ratio * sd`. It draws imputed values with `rnorm` and fills the missing entries.
+
+```{r impute_function}
+# Imputation based on a given data distribution
+impute_from_distribution <- function(x, percentile = 0.05, sd_ratio = 0.5, seed = 42) {
+  
+  # --- Step 0: Setup and preprocessing ---
+  
+  # set a random seed for reproducibility
+  if (!is.null(seed)) set.seed(seed)
+  
+  # Separate observed (non-missing) values
+  obs <- x[!is.na(x)]
+  
+  # --- Step 1: Calculate mean and standard deviation of observed data ---
+  m <- mean(obs)
+  s <- sd(obs)
+  
+  # --- Step 2: Derive new mean from lower quantile of the old distribution ---
+  # We use qnorm to get the value at a given lower quantile (e.g., 5%)
+  # This simulates the lower tail of the original distribution for imputation
+  mu_imp <- qnorm(percentile, mean = m, sd = s)
+  
+  # --- Step 3: Derive new standard deviation as a fraction of observed SD ---
+  # This ensures the imputed values vary less than the observed data
+  sd_imp <- sd_ratio * s
+  
+  # --- Step 4: Generate imputed values for missing entries ---
+  n_miss <- sum(is.na(x))
+  imp_vals <- rnorm(n_miss, mean = mu_imp, sd = sd_imp)
+  
+  # Replace missing values with imputed values
+  x_imp <- x
+  x_imp[is.na(x_imp)] <- imp_vals
+  
+  # --- Return results and summary statistics ---
+  return(list(
+    values = x_imp,      # full vector with imputed values
+    imputed = imp_vals,  # the imputed subset
+    mu_imp = mu_imp,     # imputation mean
+    sd_imp = sd_imp,     # imputation standard deviation
+    mean_obs = m,        # observed mean
+    sd_obs = s,          # observed standard deviation
+    n_missing = n_miss   # number of missing values imputed
+  ))
+}
+```
+
+**-> (b): **<br>**Apply your function to the variable ctrl.1 and plot the overall sample and the imputed data similarly to Figure 1.**
+
+#### (b) Apply to ctrl.1 and produce a plot: 
+
+
+We read the dataset, impute `ctrl.1` using a lower-tail mean (`percentile = 0.05`) and a reduced spread (`sd_ratio = 0.5`), and overlay the histograms of the overall values (blue) and imputed values (red).
+
+```{r impute_apply_ctrl1}
+ms_raw <- read.delim("Assignment_1_supplement/ms_toy.txt", check.names = FALSE)
+ctrl1 <- ms_raw$ctrl.1
+sum(is.na(ctrl1))  # missing count before
+
+imp_ctrl1 <- impute_from_distribution(ctrl1, percentile = 0.05, sd_ratio = 0.5, seed = 123)
+sum(is.na(imp_ctrl1$values))  # missing count after
+```
+
+```{r impute_plot_ctrl1, fig.width=7, fig.height=4}
+all_vals <- imp_ctrl1$values
+imp_vals <- imp_ctrl1$imputed
+brks <- seq(floor(min(all_vals)), ceiling(max(all_vals)), length.out = 60)
+
+hist(all_vals,
+     breaks = brks,
+     col = rgb(0, 0, 1, 0.7), border = NA,
+     main = "Imputation for ctrl.1: Overall (Blue) vs Imputed (Red)",
+     xlab = "Intensity")
+hist(imp_vals,
+     breaks = brks,
+     col = rgb(1, 0, 0, 0.7), border = NA,
+     add = TRUE)
+legend("topright", inset = 0.02,
+       legend = c("Overall (after imputation)", "Imputed only"),
+       fill = c(rgb(0, 0, 1, 0.7), rgb(1, 0, 0, 0.7)), border = NA, cex = 0.8)
+grid()
+```
+
+```{r impute_params_summary}
+data.frame(
+  observed_mean = round(imp_ctrl1$mean_obs, 3),
+  observed_sd = round(imp_ctrl1$sd_obs, 3),
+  imputed_mean = round(imp_ctrl1$mu_imp, 3),
+  imputed_sd = round(imp_ctrl1$sd_imp, 3),
+  n_missing = imp_ctrl1$n_missing
+)
+```
+
+**-> (c): **<br>**What is the effect of changing the percentile parameter in Step 2 and the ratio parameter in Step 3?**
+
+#### (c) Parameter effects:
+
+Lower percentiles move the imputed mean further into the left tail (smaller values), while larger percentiles shift imputed values upward. Smaller SD ratios produce a tighter imputed distribution (less spread), while larger ratios widen it. The table shows the imputation mean and SD for several settings.
+
+```{r impute_param_effects}
+percentiles <- c(0.01, 0.05, 0.10)
+ratios <- c(0.2, 0.4, 0.6)
+out <- list()
+for (p in percentiles) {
+  for (r in ratios) {
+    tmp <- impute_from_distribution(ctrl1, percentile = p, sd_ratio = r, seed = 123)
+    out[[length(out) + 1]] <- data.frame(
+      percentile = p,
+      sd_ratio = r,
+      imputed_mean = tmp$mu_imp,
+      imputed_sd = tmp$sd_imp
+    )
+  }
+}
+do.call(rbind, out)
+```
+
+Visualization: Histograms showing how the imputed distribution changes with different `percentile` and `sd_ratio` settings.
+
+```{r impute_param_hist_grid_patchwork, message=FALSE, warning=FALSE, echo=FALSE}
+# Use patchwork if available; otherwise fall back to cowplot
+has_patchwork <- requireNamespace("patchwork", quietly = TRUE)
+has_cowplot <- requireNamespace("cowplot", quietly = TRUE)
+if (!has_patchwork && !has_cowplot) {
+  stop("Install either 'patchwork' or 'cowplot' to render the grid.")
+}
+
+library(ggplot2)
+
+# Rebuild parameter grid (chunk independence)
+percentiles <- c(0.01, 0.05, 0.10)
+ratios <- c(0.2, 0.4, 0.6)
+
+# Compute global x breaks (same x-axis across all panels)
+grid_results <- list()
+for (p in percentiles) {
+  for (r in ratios) {
+    tmp <- impute_from_distribution(ctrl1, percentile = p, sd_ratio = r, seed = 123)
+    key <- paste0("p=", p, ", r=", r)
+    grid_results[[key]] <- list(all = tmp$values, imp = tmp$imputed)
+  }
+}
+
+mins <- sapply(grid_results, function(z) min(z$all, na.rm = TRUE))
+maxs <- sapply(grid_results, function(z) max(z$all, na.rm = TRUE))
+xmin <- floor(min(mins))
+xmax <- ceiling(max(maxs))
+nbins <- 60
+binwidth <- (xmax - xmin) / nbins
+
+# Compute a common y-limit from histogram counts with the agreed bins
+count_max <- 0
+for (k in names(grid_results)) {
+  h_all <- hist(grid_results[[k]]$all, breaks = seq(xmin, xmax, length.out = nbins + 1), plot = FALSE)
+  h_imp <- hist(grid_results[[k]]$imp, breaks = h_all$breaks, plot = FALSE)
+  count_max <- max(count_max, h_all$counts, h_imp$counts, na.rm = TRUE)
+}
+
+make_panel <- function(vals_all, vals_imp, title) {
+  df_all <- data.frame(x = vals_all, grp = "Overall")
+  df_imp <- data.frame(x = vals_imp, grp = "Imputed")
+  ggplot() +
+    geom_histogram(data = df_all, aes(x = x, y = after_stat(count)),
+                   binwidth = binwidth, boundary = xmin, fill = rgb(0,0,1,0.7), color = NA) +
+    geom_histogram(data = df_imp, aes(x = x, y = after_stat(count)),
+                   binwidth = binwidth, boundary = xmin, fill = rgb(1,0,0,0.7), color = NA) +
+    scale_x_continuous(limits = c(xmin, xmax)) +
+    coord_cartesian(ylim = c(0, count_max)) +
+    labs(title = title, x = "Intensity", y = "Count") +
+    theme_minimal(base_size = 10) +
+    theme(plot.title = element_text(size = 10))
+}
+
+plots <- list()
+for (p in percentiles) {
+  for (r in ratios) {
+    key <- paste0("p=", p, ", r=", r)
+    plots[[length(plots) + 1]] <- make_panel(
+      grid_results[[key]]$all,
+      grid_results[[key]]$imp,
+      paste0("p=", p, ", r=", r)
+    )
+  }
+}
+
+if (has_patchwork) {
+  patchwork::wrap_plots(plots, ncol = 3)
+} else {
+  cowplot::plot_grid(plotlist = plots, ncol = 3, align = "hv")
+}
+```
+
+**-> (d): **<br>**Which configuration of parameters is the most logical/desirable?**
+
+#### (d) Recommended configuration:
+
+The goal is to impute data that was "below the detection limit," which implies the true values are both low and consistent. The parameter p controls the center of the imputed (red) data, and a small p like 0.01 correctly shifts this mean to the low-intensity region, separate from the observed (blue) data. The parameter r controls the spread, and a small r like 0.2 creates a tight, narrow peak. (see the plots above) This narrow peak logically represents a group of values that all failed to cross the same detection threshold. Therefore, combinations like (p=0.01, r=0.2) is one of the combination that creates the distinct, low, and non-variable cluster that we would expect from such missing data.
+
+### 2) k-Nearest Neighbor imputation (30 points)
+
+**-> (a): **<br>**Create a dataset with only ctrl.1, ctrl.2, ctrl.3; remove rows where all three are missing; then perform kNN imputation.**
+
+#### (a) Prepare control-only data and run kNN:
+
+We subset the three control samples and drop rows with no information across all three controls. We then use `VIM::kNN` with `k = 5`.
+
+```{r knn_prep}
+ms_ctrl <- ms_raw[, c("ctrl.1", "ctrl.2", "ctrl.3")]
+all_three_na <- rowSums(is.na(ms_ctrl)) == ncol(ms_ctrl)
+ms_ctrl_filt <- ms_ctrl[!all_three_na, ]
+
+missing_before_ctrl1 <- sum(is.na(ms_ctrl_filt$ctrl.1))
+list(rows_after_filter = nrow(ms_ctrl_filt), missing_ctrl1_before = missing_before_ctrl1)
+```
+
+```{r knn_impute_ctrl, message=FALSE}
+# load VIM
+suppressPackageStartupMessages(library(VIM))
+knn_res <- VIM::kNN(ms_ctrl_filt, k = 5, imp_var = TRUE)
+
+# Extract imputed indicator and values for ctrl.1
+imp_flag_ctrl1 <- knn_res$ctrl.1_imp
+if (!is.logical(imp_flag_ctrl1)) imp_flag_ctrl1 <- as.logical(imp_flag_ctrl1)
+
+ctrl1_knn_all <- knn_res$ctrl.1
+ctrl1_knn_imp <- ctrl1_knn_all[imp_flag_ctrl1]
+
+list(
+  missing_ctrl1_after = sum(is.na(ctrl1_knn_all)),
+  imputed_count_ctrl1 = length(ctrl1_knn_imp)
+)
+```
+
+**-> (b): **<br>**Plot the imputed data for ctrl.1 similarly to Figure 1 and compare its distribution.**
+
+#### (b) Plot ctrl.1 after kNN imputation:
+
+We overlay the histogram of all ctrl.1 values after kNN imputation (blue) with the histogram of imputed-only values (red).
+
+```{r knn_plot_ctrl1, fig.width=7, fig.height=4}
+brks2 <- seq(floor(min(ctrl1_knn_all)), ceiling(max(ctrl1_knn_all)), length.out = 60)
+hist(ctrl1_knn_all,
+     breaks = brks2,
+     col = rgb(0, 0, 1, 0.7), border = NA,
+     main = "kNN Imputation for ctrl.1: Overall (Blue) vs Imputed (Red)",
+     xlab = "Intensity")
+hist(ctrl1_knn_imp,
+     breaks = brks2,
+     col = rgb(1, 0, 0, 0.7), border = NA,
+     add = TRUE)
+legend("topright", inset = 0.02,
+       legend = c("Overall (after kNN)", "Imputed only (kNN)"),
+       fill = c(rgb(0, 0, 1, 0.7), rgb(1, 0, 0, 0.7)), border = NA, cex = 0.8)
+grid()
+```
+
+**-> (c): **<br>**Compare the kNN result to the distribution-based imputation in terms of mean, SD, number of values (overall and imputed-only).**
+
+#### (c) Quantitative comparison:
+
+The table contrasts summary statistics for ctrl.1 using the two methods. Note: kNN uses the filtered dataset (rows where not all three controls are missing), while the distribution-based method was applied to the full dataset.
+
+```{r knn_comparison}
+compare_df <- rbind(
+  data.frame(
+    method = "Distribution",
+    n = length(imp_ctrl1$values),
+    missing_before = sum(is.na(ms_raw$ctrl.1)),
+    imputed_n = length(imp_ctrl1$imputed),
+    mean_overall = mean(imp_ctrl1$values),
+    sd_overall = sd(imp_ctrl1$values),
+    mean_imputed = mean(imp_ctrl1$imputed),
+    sd_imputed = sd(imp_ctrl1$imputed)
+  ),
+  data.frame(
+    method = "kNN",
+    n = length(ctrl1_knn_all),
+    missing_before = missing_before_ctrl1,
+    imputed_n = length(ctrl1_knn_imp),
+    mean_overall = mean(ctrl1_knn_all),
+    sd_overall = sd(ctrl1_knn_all),
+    mean_imputed = mean(ctrl1_knn_imp),
+    sd_imputed = sd(ctrl1_knn_imp)
+  )
+)
+compare_df
+```
+
+**-> (d): **<br>**What are the advantages and disadvantages of kNN imputation compared to the distribution-based approach?**
+
+#### (d) Discussion:
+
+
+- **kNN advantages**: leverages multivariate structure (uses similarity across ctrl.1–3), preserves local relationships and can adapt to non-Gaussian patterns; may yield more realistic values for correlated variables.
+
+- **kNN disadvantages**: requires tuning `k`; sensitive to scaling and outliers; can bias towards dense regions; depends on available neighbors (after filtering) and may be computationally heavier on large datasets.
+
+- **Distribution-based advantages**: simple, fast, controlled placement of imputed values in the lower tail to reflect left-censoring; easy to explain and reproduce.
+
+- **Distribution-based disadvantages**: ignores relationships between variables; assumes normality and chosen tail/variance; risk of under/over-dispersion if parameters are poorly chosen.
