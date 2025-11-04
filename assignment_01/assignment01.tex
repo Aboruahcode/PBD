@@ -101,17 +101,24 @@
 \urlstyle{same}
 \hypersetup{
   pdftitle={PBD Assignment 01},
-  pdfauthor={Md Mobashir Rahman (mdra00001@stud.uni-saarland.de)},
+  pdfauthor={Md Mobashir Rahman},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
 \title{PBD Assignment 01}
-\author{Md Mobashir Rahman
-(\href{mailto:mdra00001@stud.uni-saarland.de}{\nolinkurl{mdra00001@stud.uni-saarland.de}})}
-\date{November 03, 2025}
+\author{Md Mobashir Rahman}
+\date{November 04, 2025}
 
 \begin{document}
 \maketitle
+
+\fbox{
+\begin{minipage}{0.9\textwidth}
+\textbf{Author:} Md Mobashir Rahman \\
+\textbf{Email:} mdra00001@stud.uni-saarland.de \\
+\textbf{Matriculation Number:} 7059086
+\end{minipage}
+}
 
 \section{Principal Component Analysis (PCA) and Data
 Imputation}\label{principal-component-analysis-pca-and-data-imputation}
@@ -125,12 +132,12 @@ supplement (``pca toy.txt'').
 \textbf{-\textgreater{} (a): }\textbf{Standardize the variables in the
 dataset. Why is this step necessary before performing a PCA?}
 
-\paragraph{(a) Standardize the variables before running
-PCA}\label{a-standardize-the-variables-before-running-pca}
+\subsubsection{(a) Standardize the variables before running
+PCA:}\label{a-standardize-the-variables-before-running-pca}
 
-Answer: We first load the toy dataset and standardize each variable to
-have mean 0 and standard deviation 1. Standardization is necessary so
-that variables measured on different scales contribute equally to the
+We first load the toy dataset and standardize each variable to have mean
+0 and standard deviation 1. Standardization is necessary so that
+variables measured on different scales contribute equally to the
 principal components; otherwise, variables with larger variances would
 dominate the PCA solution.
 
@@ -155,14 +162,17 @@ dominate the PCA solution.
 ## d        d -1.116251e-16  1
 \end{verbatim}
 
+\textbf{Observation}: Column means are \textasciitilde0 and SDs are 1
+(tiny numerical noise is expected).
+
 \textbf{-\textgreater{} (b): }\textbf{Create a scatter plot from the
 transformed data, with PC1 and PC2 as the axes.}
 
-\paragraph{(b) Run PCA and create a scatter plot of PC1 vs
-PC2}\label{b-run-pca-and-create-a-scatter-plot-of-pc1-vs-pc2}
+\subsubsection{(b) Run PCA and create a scatter plot of PC1 vs
+PC2:}\label{b-run-pca-and-create-a-scatter-plot-of-pc1-vs-pc2}
 
-Answer: We compute the PCA on standardized variables and plot the scores
-on PC1 vs PC2.
+We compute the PCA on standardized variables and plot the scores on PC1
+vs PC2.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -191,12 +201,12 @@ on PC1 vs PC2.
 \textbf{-\textgreater{} (c): }\textbf{Which variables are the most
 important for PC1 and PC2? Why?}
 
-\paragraph{(c) Identify the most important variables for PC1 and
-PC2}\label{c-identify-the-most-important-variables-for-pc1-and-pc2}
+\subsubsection{(c) Identify the most important variables for PC1 and
+PC2:}\label{c-identify-the-most-important-variables-for-pc1-and-pc2}
 
-Answer: We examine the loadings (i.e., the coefficients of the
-eigenvectors) for PC1 and PC2. Variables with larger absolute loadings
-contribute more to the corresponding component.
+We examine the loadings (i.e., the coefficients of the eigenvectors) for
+PC1 and PC2. Variables with larger absolute loadings contribute more to
+the corresponding component.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -221,11 +231,11 @@ highest leverage in shaping the corresponding components.
 \textbf{-\textgreater{} (d) :}\textbf{What percentage of the variance in
 the dataset is explained by PC1 and PC2?}
 
-\paragraph{(d) Determine the variance explained by PC1 and
-PC2}\label{d-determine-the-variance-explained-by-pc1-and-pc2}
+\subsubsection{(d) Determine the variance explained by PC1 and
+PC2:}\label{d-determine-the-variance-explained-by-pc1-and-pc2}
 
-Answer: We compute the proportion of variance explained by each
-principal component and report the first two.
+We compute the proportion of variance explained by each principal
+component and report the first two.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -247,12 +257,12 @@ dataset.
 \textbf{-\textgreater{} (e): }\textbf{Under what circumstances would
 more PCs be considered?}
 
-\paragraph{(e) When to consider more principal
-components}\label{e-when-to-consider-more-principal-components}
+\subsubsection{(e) When to consider more principal
+components:}\label{e-when-to-consider-more-principal-components}
 
-Answer: We would consider additional principal components if the first
-two components do not capture a sufficient proportion of the total
-variance for the analysis goals, or if later components reveal important
+We would consider additional principal components if the first two
+components do not capture a sufficient proportion of the total variance
+for the analysis goals, or if later components reveal important
 structure or patterns (e.g., clustering) relevant to the research
 question. Scree plots, cumulative variance thresholds (such as
 80\%--90\%), or domain knowledge about necessary detail can guide this
@@ -260,6 +270,11 @@ decision.
 
 \subsection{Exercise: Data Imputation (60
 points)}\label{exercise-data-imputation-60-points}
+
+Data imputation techniques can be used to fill out missing data in
+sparse dataframes. Here, we will try to generate missing entries in a
+proteomics dataset (''ms toy.txt'') that were below the detection limit
+for expression data. Missing values are denoted as ''NA''.
 
 \subsubsection{1) Imputation based on a given data distribution (30
 points)}\label{imputation-based-on-a-given-data-distribution-30-points}
@@ -270,9 +285,9 @@ from a lower quantile of the observed data and whose standard deviation
 is a fraction of the observed SD.}
 
 \paragraph{(a) Implement the imputation
-function}\label{a-implement-the-imputation-function}
+function:}\label{a-implement-the-imputation-function}
 
-Answer: The function below takes a numeric vector with NAs, computes the
+The function below takes a numeric vector with NAs, computes the
 observed mean and SD, sets the imputation mean to
 \texttt{qnorm(percentile,\ mean,\ sd)} (lower tail), and the imputation
 SD to \texttt{sd\_ratio\ *\ sd}. It draws imputed values with
@@ -280,19 +295,48 @@ SD to \texttt{sd\_ratio\ *\ sd}. It draws imputed values with
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Imputation based on a given data distribution}
 \NormalTok{impute\_from\_distribution }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{percentile =} \FloatTok{0.05}\NormalTok{, }\AttributeTok{sd\_ratio =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{seed =} \DecValTok{42}\NormalTok{) \{}
+  
+  \CommentTok{\# {-}{-}{-} Step 0: Setup and preprocessing {-}{-}{-}}
+  
+  \CommentTok{\# set a random seed for reproducibility}
   \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{is.null}\NormalTok{(seed)) }\FunctionTok{set.seed}\NormalTok{(seed)}
+  
+  \CommentTok{\# Separate observed (non{-}missing) values}
 \NormalTok{  obs }\OtherTok{\textless{}{-}}\NormalTok{ x[}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(x)]}
+  
+  \CommentTok{\# {-}{-}{-} Step 1: Calculate mean and standard deviation of observed data {-}{-}{-}}
 \NormalTok{  m }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(obs)}
 \NormalTok{  s }\OtherTok{\textless{}{-}} \FunctionTok{sd}\NormalTok{(obs)}
+  
+  \CommentTok{\# {-}{-}{-} Step 2: Derive new mean from lower quantile of the old distribution {-}{-}{-}}
+  \CommentTok{\# We use qnorm to get the value at a given lower quantile (e.g., 5\%)}
+  \CommentTok{\# This simulates the lower tail of the original distribution for imputation}
 \NormalTok{  mu\_imp }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(percentile, }\AttributeTok{mean =}\NormalTok{ m, }\AttributeTok{sd =}\NormalTok{ s)}
+  
+  \CommentTok{\# {-}{-}{-} Step 3: Derive new standard deviation as a fraction of observed SD {-}{-}{-}}
+  \CommentTok{\# This ensures the imputed values vary less than the observed data}
 \NormalTok{  sd\_imp }\OtherTok{\textless{}{-}}\NormalTok{ sd\_ratio }\SpecialCharTok{*}\NormalTok{ s}
+  
+  \CommentTok{\# {-}{-}{-} Step 4: Generate imputed values for missing entries {-}{-}{-}}
 \NormalTok{  n\_miss }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(x))}
 \NormalTok{  imp\_vals }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(n\_miss, }\AttributeTok{mean =}\NormalTok{ mu\_imp, }\AttributeTok{sd =}\NormalTok{ sd\_imp)}
+  
+  \CommentTok{\# Replace missing values with imputed values}
 \NormalTok{  x\_imp }\OtherTok{\textless{}{-}}\NormalTok{ x}
 \NormalTok{  x\_imp[}\FunctionTok{is.na}\NormalTok{(x\_imp)] }\OtherTok{\textless{}{-}}\NormalTok{ imp\_vals}
-  \FunctionTok{list}\NormalTok{(}\AttributeTok{values =}\NormalTok{ x\_imp, }\AttributeTok{imputed =}\NormalTok{ imp\_vals, }\AttributeTok{mu\_imp =}\NormalTok{ mu\_imp, }\AttributeTok{sd\_imp =}\NormalTok{ sd\_imp,}
-       \AttributeTok{mean\_obs =}\NormalTok{ m, }\AttributeTok{sd\_obs =}\NormalTok{ s, }\AttributeTok{n\_missing =}\NormalTok{ n\_miss)}
+  
+  \CommentTok{\# {-}{-}{-} Return results and summary statistics {-}{-}{-}}
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{list}\NormalTok{(}
+    \AttributeTok{values =}\NormalTok{ x\_imp,      }\CommentTok{\# full vector with imputed values}
+    \AttributeTok{imputed =}\NormalTok{ imp\_vals,  }\CommentTok{\# the imputed subset}
+    \AttributeTok{mu\_imp =}\NormalTok{ mu\_imp,     }\CommentTok{\# imputation mean}
+    \AttributeTok{sd\_imp =}\NormalTok{ sd\_imp,     }\CommentTok{\# imputation standard deviation}
+    \AttributeTok{mean\_obs =}\NormalTok{ m,        }\CommentTok{\# observed mean}
+    \AttributeTok{sd\_obs =}\NormalTok{ s,          }\CommentTok{\# observed standard deviation}
+    \AttributeTok{n\_missing =}\NormalTok{ n\_miss   }\CommentTok{\# number of missing values imputed}
+\NormalTok{  ))}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -302,10 +346,10 @@ variable ctrl.1 and plot the overall sample and the imputed data
 similarly to Figure 1.}
 
 \paragraph{(b) Apply to ctrl.1 and produce a
-plot}\label{b-apply-to-ctrl.1-and-produce-a-plot}
+plot:}\label{b-apply-to-ctrl.1-and-produce-a-plot}
 
-Answer: We read the dataset, impute \texttt{ctrl.1} using a lower-tail
-mean (\texttt{percentile\ =\ 0.05}) and a reduced spread
+We read the dataset, impute \texttt{ctrl.1} using a lower-tail mean
+(\texttt{percentile\ =\ 0.05}) and a reduced spread
 (\texttt{sd\_ratio\ =\ 0.5}), and overlay the histograms of the overall
 values (blue) and imputed values (red).
 
@@ -376,13 +420,13 @@ values (blue) and imputed values (red).
 \textbf{-\textgreater{} (c): }\textbf{What is the effect of changing the
 percentile parameter in Step 2 and the ratio parameter in Step 3?}
 
-\paragraph{(c) Parameter effects}\label{c-parameter-effects}
+\paragraph{(c) Parameter effects:}\label{c-parameter-effects}
 
-Answer: Lower percentiles move the imputed mean further into the left
-tail (smaller values), while larger percentiles shift imputed values
-upward. Smaller SD ratios produce a tighter imputed distribution (less
-spread), while larger ratios widen it. The table shows the imputation
-mean and SD for several settings.
+Lower percentiles move the imputed mean further into the left tail
+(smaller values), while larger percentiles shift imputed values upward.
+Smaller SD ratios produce a tighter imputed distribution (less spread),
+while larger ratios widen it. The table shows the imputation mean and SD
+for several settings.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -417,20 +461,28 @@ mean and SD for several settings.
 ## 9       0.10      0.6     25.52581  1.6434264
 \end{verbatim}
 
+Visualization: Histograms showing how the imputed distribution changes
+with different \texttt{percentile} and \texttt{sd\_ratio} settings.
+
+\begin{center}\includegraphics{assignment01_files/figure-latex/impute_param_hist_grid_patchwork-1} \end{center}
+
 \textbf{-\textgreater{} (d): }\textbf{Which configuration of parameters
 is the most logical/desirable?}
 
 \paragraph{(d) Recommended
-configuration}\label{d-recommended-configuration}
+configuration:}\label{d-recommended-configuration}
 
-Answer: For left-censored proteomics data, a small lower-tail percentile
-(e.g., 1\%--5\%) and a moderate SD ratio (e.g., 0.3--0.5) are often
-desirable: they place imputed values plausibly below the bulk of
-observed intensities while avoiding unrealistically large spread. The
-exact choice should reflect instrument sensitivity and domain knowledge;
-here we use \texttt{percentile\ =\ 0.05} and \texttt{sd\_ratio\ =\ 0.5}
-to simulate low-expression values below detection while maintaining
-reasonable variability.
+The goal is to impute data that was ``below the detection limit,'' which
+implies the true values are both low and consistent. The parameter p
+controls the center of the imputed (red) data, and a small p like 0.01
+correctly shifts this mean to the low-intensity region, separate from
+the observed (blue) data. The parameter r controls the spread, and a
+small r like 0.2 creates a tight, narrow peak. (see the plots above)
+This narrow peak logically represents a group of values that all failed
+to cross the same detection threshold. Therefore, combinations like
+(p=0.01, r=0.2) is one of the combination that creates the distinct,
+low, and non-variable cluster that we would expect from such missing
+data.
 
 \subsubsection{2) k-Nearest Neighbor imputation (30
 points)}\label{k-nearest-neighbor-imputation-30-points}
@@ -440,11 +492,11 @@ ctrl.2, ctrl.3; remove rows where all three are missing; then perform
 kNN imputation.}
 
 \paragraph{(a) Prepare control-only data and run
-kNN}\label{a-prepare-control-only-data-and-run-knn}
+kNN:}\label{a-prepare-control-only-data-and-run-knn}
 
-Answer: We subset the three control samples and drop rows with no
-information across all three controls. We then use \texttt{VIM::kNN}
-with \texttt{k\ =\ 5}.
+We subset the three control samples and drop rows with no information
+across all three controls. We then use \texttt{VIM::kNN} with
+\texttt{k\ =\ 5}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -467,10 +519,7 @@ with \texttt{k\ =\ 5}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"VIM"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)) \{}
-  \FunctionTok{stop}\NormalTok{(}\StringTok{"Package \textquotesingle{}VIM\textquotesingle{} is required for kNN imputation. Install with install.packages(\textquotesingle{}VIM\textquotesingle{})."}\NormalTok{)}
-\NormalTok{\}}
-
+\CommentTok{\# load VIM}
 \FunctionTok{suppressPackageStartupMessages}\NormalTok{(}\FunctionTok{library}\NormalTok{(VIM))}
 \NormalTok{knn\_res }\OtherTok{\textless{}{-}}\NormalTok{ VIM}\SpecialCharTok{::}\FunctionTok{kNN}\NormalTok{(ms\_ctrl\_filt, }\AttributeTok{k =} \DecValTok{5}\NormalTok{, }\AttributeTok{imp\_var =} \ConstantTok{TRUE}\NormalTok{)}
 \end{Highlighting}
@@ -513,10 +562,10 @@ with \texttt{k\ =\ 5}.
 similarly to Figure 1 and compare its distribution.}
 
 \paragraph{(b) Plot ctrl.1 after kNN
-imputation}\label{b-plot-ctrl.1-after-knn-imputation}
+imputation:}\label{b-plot-ctrl.1-after-knn-imputation}
 
-Answer: We overlay the histogram of all ctrl.1 values after kNN
-imputation (blue) with the histogram of imputed-only values (red).
+We overlay the histogram of all ctrl.1 values after kNN imputation
+(blue) with the histogram of imputed-only values (red).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -543,12 +592,13 @@ imputation (blue) with the histogram of imputed-only values (red).
 distribution-based imputation in terms of mean, SD, number of values
 (overall and imputed-only).}
 
-\paragraph{(c) Quantitative comparison}\label{c-quantitative-comparison}
+\paragraph{(c) Quantitative
+comparison:}\label{c-quantitative-comparison}
 
-Answer: The table contrasts summary statistics for ctrl.1 using the two
-methods. Note: kNN uses the filtered dataset (rows where not all three
-controls are missing), while the distribution-based method was applied
-to the full dataset.
+The table contrasts summary statistics for ctrl.1 using the two methods.
+Note: kNN uses the filtered dataset (rows where not all three controls
+are missing), while the distribution-based method was applied to the
+full dataset.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -591,19 +641,27 @@ to the full dataset.
 disadvantages of kNN imputation compared to the distribution-based
 approach?}
 
-\paragraph{(d) Discussion}\label{d-discussion}
+\paragraph{(d) Discussion:}\label{d-discussion}
 
-Answer: - kNN advantages: leverages multivariate structure (uses
-similarity across ctrl.1--3), preserves local relationships and can
-adapt to non-Gaussian patterns; may yield more realistic values for
-correlated variables. - kNN disadvantages: requires tuning \texttt{k};
-sensitive to scaling and outliers; can bias towards dense regions;
-depends on available neighbors (after filtering) and may be
-computationally heavier on large datasets. - Distribution-based
-advantages: simple, fast, controlled placement of imputed values in the
-lower tail to reflect left-censoring; easy to explain and reproduce. -
-Distribution-based disadvantages: ignores relationships between
-variables; assumes normality and chosen tail/variance; risk of
-under/over-dispersion if parameters are poorly chosen.
+\begin{itemize}
+\item
+  \textbf{kNN advantages}: leverages multivariate structure (uses
+  similarity across ctrl.1--3), preserves local relationships and can
+  adapt to non-Gaussian patterns; may yield more realistic values for
+  correlated variables.
+\item
+  \textbf{kNN disadvantages}: requires tuning \texttt{k}; sensitive to
+  scaling and outliers; can bias towards dense regions; depends on
+  available neighbors (after filtering) and may be computationally
+  heavier on large datasets.
+\item
+  \textbf{Distribution-based advantages}: simple, fast, controlled
+  placement of imputed values in the lower tail to reflect
+  left-censoring; easy to explain and reproduce.
+\item
+  \textbf{Distribution-based disadvantages}: ignores relationships
+  between variables; assumes normality and chosen tail/variance; risk of
+  under/over-dispersion if parameters are poorly chosen.
+\end{itemize}
 
 \end{document}
