@@ -1,0 +1,596 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{tcolorbox}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={PDB\_Assignment1\_Exercise\_2},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{PDB\_Assignment1\_Exercise\_2}
+\author{}
+\date{\vspace{-2.5em}2025-11-14}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\begin{tcolorbox}[colback=white, colframe=black, width=0.8\textwidth]
+
+\textbf{Name1: Adwitiya Argha Priyadarshini Boruah}\\
+\textbf{Matriculation No. 1: 7070291}\\
+\textbf{Email1: adbo00002@stud.uni-saarland.de}
+
+\vspace{0.7cm}
+
+\textbf{Name2: Md Mobashir Rahman}\\
+\textbf{Matriculation No. 2: 7059086}\\
+\textbf{Email2: mdra00001@stud.uni-saarland.de}
+
+\end{tcolorbox}
+\end{center}
+
+\textbf{Exercise 2.2: Detecting peaks in cell-cycle expression data}
+
+\textbf{\emph{a.}}
+
+The code begins by importing the expression dataset stored in a TSV
+file, where the first column contains gene identifiers and the remaining
+columns contain time-series expression measurements. The first column is
+renamed to ID to improve readability and ensure consistent referencing
+in later steps.
+
+A subset of the dataset is then created by selecting the four
+assignment-specified genes (766, 932, 3297, 4685). For each selected
+gene, the corresponding row is extracted and converted into a numeric
+vector representing its expression profile across all time points.
+
+To visualise the temporal expression patterns, the expression curve of
+gene 766 is plotted first, with axis limits determined from all four
+genes to maintain a common scale. The remaining gene profiles are then
+added to the same figure using additional line layers, each displayed in
+a different colour. Finally, a legend is included to indicate which
+colour corresponds to each gene, enabling straightforward interpretation
+of the combined time-series plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# loading the expression data}
+
+\CommentTok{\#the dataset is stored as a TSV file where{-} the first column contains gene IDs, the remaining columns contain expression values over time, the file already contains a header row.}
+
+\NormalTok{expression\_data }\OtherTok{\textless{}{-}} \FunctionTok{read.table}\NormalTok{(}\StringTok{"periodic\_gene\_expression.tsv"}\NormalTok{,}
+                              \AttributeTok{header =} \ConstantTok{TRUE}\NormalTok{,}
+                              \AttributeTok{sep =} \StringTok{"}\SpecialCharTok{\textbackslash{}t}\StringTok{"}\NormalTok{,}
+                              \AttributeTok{check.names =} \ConstantTok{FALSE}\NormalTok{)}
+
+\CommentTok{\# the first column corresponds to the gene identifiers.}
+\CommentTok{\#to make the later code readable, Renaming the first column to "ID"}
+
+\FunctionTok{colnames}\NormalTok{(expression\_data)[}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"ID"}
+
+
+\CommentTok{\# selecting the 4 genes of interest}
+
+\CommentTok{\#these four specific genes are provided in the assignment.}
+
+\NormalTok{genes\_of\_interest }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{766}\NormalTok{, }\DecValTok{932}\NormalTok{, }\DecValTok{3297}\NormalTok{, }\DecValTok{4685}\NormalTok{)}
+
+\CommentTok{\#then extracting only the rows whose gene ID matches one of the four}
+\NormalTok{selected\_data }\OtherTok{\textless{}{-}}\NormalTok{ expression\_data[expression\_data}\SpecialCharTok{$}\NormalTok{ID }\SpecialCharTok{\%in\%}\NormalTok{ genes\_of\_interest, ]}
+
+\CommentTok{\# displaying the extracted rows to confirm successful selection}
+\FunctionTok{print}\NormalTok{(selected\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        ID 0.132541748514212 0.22764074056482023 0.14828200919760418
+## 766   766       -0.27288290          -0.1402047          -0.1128550
+## 932   932       -0.72494565          -0.6044916          -0.6523827
+## 3297 3297       -0.68898718          -0.6155137          -0.6046890
+## 4685 4685       -0.09938045           0.1185993           0.1118007
+##      0.0554196263670002 0.1734260578698282 0.21282449873561188
+## 766         -0.38850498        -0.20155600        -0.001224659
+## 932         -0.61646438        -0.43006450        -0.274523898
+## 3297        -0.61280753        -0.40919111        -0.252765107
+## 4685        -0.08997058         0.05437659         0.410260507
+##      0.2959316374566157 0.10648439408557102 0.0532648666532511
+## 766          -0.0377355         -0.29425663         -0.5019609
+## 932          -0.2834915         -0.52907145         -0.4511528
+## 3297         -0.1852222         -0.40165764         -0.2742209
+## 4685          0.2298077          0.05389742         -0.2249058
+##      0.09581446272390506 0.05129511406244348 0.07547365913936471
+## 766          -0.38202540         -0.45801365          -0.3689231
+## 932           0.01060914         -0.16274681           0.5293526
+## 3297          0.04705137          0.09735093           0.7560012
+## 4685          0.01736852         -0.02345934           0.2617990
+##      0.1466597179944586         0.0 0.16170685189870834 0.0962233485286289
+## 766          -0.3962889 -0.50365337         -0.36083764         -0.4387279
+## 932           0.5050022 -0.08325892          0.43741532          0.1898679
+## 3297          0.8799099 -0.07232278          0.30204116          0.6625337
+## 4685          0.1937000 -0.07881011          0.08492213          0.1635400
+##      0.221036209616606 0.2626756736252612 0.2617379530741627 0.0818723471906627
+## 766       -0.326866497        -0.09191352         -0.2094387        -0.22938827
+## 932       -0.143050560         0.56471247          0.2390177        -0.35822483
+## 3297      -0.084656215         0.27101245          0.4385655        -0.38487294
+## 4685      -0.001167767         0.25425552          0.2302894        -0.05280242
+##      0.3423823824497884 0.4884630853337104 0.5984292087376138
+## 766          0.22332359          0.7026936          0.7322760
+## 932         -0.01996294          0.5141617          0.4820379
+## 3297         0.02122035          0.5030699          0.5516945
+## 4685         0.25499532          0.6684735          0.6436055
+##      0.2927636511301089 0.233825552475406 0.36030610067167634 0.304413462625733
+## 766          0.16166959       0.114595065           0.6154359        0.57109047
+## 932         -0.05554091      -0.665894943          -0.3643267       -0.46780941
+## 3297         0.01922238      -0.483129527          -0.2538520       -0.20417184
+## 4685         0.24238941      -0.008344068           0.1783239        0.08771943
+##      0.511610836277837 0.5540874214525923 0.0965652318072868
+## 766         1.53259836          1.4530432          0.1454652
+## 932        -0.18501283         -0.2131731         -0.5575185
+## 3297        0.07671401          0.1224073         -0.5014262
+## 4685        0.39157866          0.3438343         -0.2467660
+##      0.31740257140675465 0.2637698847445678 0.136338877840614
+## 766           0.67631728          0.5731190        -0.2465296
+## 932          -0.15509407         -0.2828990        -0.1495542
+## 3297         -0.25874400         -0.2304479        -0.3717523
+## 4685         -0.07882122         -0.1073084        -0.3062507
+##      0.25932811026538605 0.2129808950361875 0.0914792140057591
+## 766           0.14227247         0.12780586         -0.4383687
+## 932           0.28305838         0.09462879         -0.2155773
+## 3297         -0.02974996         0.02702020         -0.1357733
+## 4685         -0.20404414        -0.24920646         -0.2064846
+##      0.29587779632116323 0.33886632613890294 0.5180620591233701
+## 766           -0.2574716         -0.03042826        -0.12623227
+## 932            0.4637000          1.34023165         1.20275957
+## 3297           0.2873934          0.90564030         1.06148140
+## 4685          -0.1287809          0.06737074        -0.04009712
+##      0.2184925118603042 0.21441932344455 0.4861313922407195 0.4457566445177248
+## 766          -0.3377749       -0.5280206         -0.4390830         -0.4989106
+## 932           0.2688001       -0.1366825          0.4688820          0.2188778
+## 3297          0.2776403       -0.1696417          0.2139648          0.2296759
+## 4685         -0.2091097       -0.2311721         -0.1165452         -0.1557444
+##      0.8759406782194549 0.9236911811391476 0.398111926622587 0.5448712426120207
+## 766         -0.41214975         -0.4542910        -0.4996249        -0.27377372
+## 932          1.08063786          1.0221858        -0.2731893         0.16652692
+## 3297         0.77366543          0.8071778        -0.4592769        -0.07340191
+## 4685         0.03736671         -0.0423044        -0.2159622        -0.14333913
+##      0.6209457850670713 0.155173850989368 0.45114115763541357
+## 766         -0.32237981        -0.1087224          0.14899284
+## 932          0.12454799        -0.4617624         -0.06233065
+## 3297        -0.05891607        -0.4269254         -0.20620763
+## 4685        -0.18612001        -0.2646038         -0.19376525
+##      0.4161490353680438 0.150082533835292 0.3123944639615827 0.4501608697992175
+## 766          0.08711755       -0.08223605          0.3635828         1.14559167
+## 932         -0.21000537       -0.47628831         -0.1139123         0.12407645
+## 3297        -0.20579989       -0.47699004         -0.2217123         0.09272154
+## 4685        -0.21594051       -0.26964570         -0.2059457        -0.04500520
+##      0.5623950879002614 0.2981183056877373
+## 766           0.9324630          0.3238018
+## 932           0.3120156         -0.2627014
+## 3297          0.1411859         -0.2115363
+## 4685         -0.2194457         -0.2390253
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#extracting the time series of each gene}
+
+\CommentTok{\#for each selected gene, expression values are extracted}
+\CommentTok{\# i.e. all columns except the ID column}
+\CommentTok{\#then converting them to numeric to ensure the correct plotting}
+\NormalTok{gene766  }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(selected\_data[selected\_data}\SpecialCharTok{$}\NormalTok{ID }\SpecialCharTok{==} \DecValTok{766}\NormalTok{,  }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])}
+\NormalTok{gene932  }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(selected\_data[selected\_data}\SpecialCharTok{$}\NormalTok{ID }\SpecialCharTok{==} \DecValTok{932}\NormalTok{,  }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])}
+\NormalTok{gene3297 }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(selected\_data[selected\_data}\SpecialCharTok{$}\NormalTok{ID }\SpecialCharTok{==} \DecValTok{3297}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])}
+\NormalTok{gene4685 }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(selected\_data[selected\_data}\SpecialCharTok{$}\NormalTok{ID }\SpecialCharTok{==} \DecValTok{4685}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])}
+
+
+\CommentTok{\# plotting the Expression time series of the four genes}
+\CommentTok{\#starting by plotting the gene 766 alone}
+\CommentTok{\# the y axis limits are defined using all four genes so that}
+\CommentTok{\# the curves fit together on the same scale.}
+\FunctionTok{plot}\NormalTok{(gene766, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{,}
+     \AttributeTok{ylim =} \FunctionTok{range}\NormalTok{(selected\_data[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{], }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+     \AttributeTok{xlab =} \StringTok{"Timepoint"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Expression"}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Expression of Genes 766, 932, 3297, 4685"}\NormalTok{)}
+
+\CommentTok{\#then adding the remaining three gene curves using lines()}
+\FunctionTok{lines}\NormalTok{(gene932,  }\AttributeTok{col =} \StringTok{"red"}\NormalTok{,       }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(gene3297, }\AttributeTok{col =} \StringTok{"darkgreen"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(gene4685, }\AttributeTok{col =} \StringTok{"black"}\NormalTok{,    }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{xpd =} \ConstantTok{NA}\NormalTok{) }\CommentTok{\#allowing drawing outside plot}
+\CommentTok{\# A legend is added to indicate which color corresponds to which gene}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{inset =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.095}\NormalTok{, }\DecValTok{0}\NormalTok{),}
+       \AttributeTok{legend=}\FunctionTok{c}\NormalTok{(}\StringTok{"766"}\NormalTok{,}\StringTok{"932"}\NormalTok{,}\StringTok{"3297"}\NormalTok{,}\StringTok{"4685"}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{, }\StringTok{"red"}\NormalTok{, }\StringTok{"darkgreen"}\NormalTok{, }\StringTok{"black"}\NormalTok{), }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{pch=}\DecValTok{19}\NormalTok{,}\AttributeTok{cex =}\FloatTok{0.8}\NormalTok{, }\AttributeTok{bg =} \StringTok{"white"}\NormalTok{, }\AttributeTok{bty =} \StringTok{"o"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{PDB_Assignment1_Exercise_2_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\textbf{b.} \textbf{\emph{1.}}
+
+The code implements the peak-labelling procedure by assigning labels to
+time points according to their expression values and a chosen adjacency
+threshold. The function first determines the number of time points and
+creates a vector in which all positions are initially unlabeled. The
+expression values are then ordered from highest to lowest so that
+labeling begins at the largest local maxima. For each time point in this
+ordered list, neighbouring indices within the specified adjacency
+threshold are identified. If any neighbouring positions already carry a
+label, that label is inherited; otherwise, a new label is created. This
+procedure groups adjacent high-expression points into peak components.
+
+\textbf{2.}
+
+After all points are labelled, representative peak positions are
+extracted by selecting, within each label group, the time point with the
+maximum expression value. The function returns the complete set of
+labels as well as the final peak coordinates. The code is then applied
+to gene 766 with an adjacency threshold of 2, and the corresponding peak
+labels and representative peak positions are printed.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 2.2(b1) — }
+
+\CommentTok{\# This function groups timepoints into peaks based on:}
+\CommentTok{\# {-} their expression height}
+\CommentTok{\# {-} an adjacency threshold}
+\CommentTok{\# It returns a label for each timepoint and the peak centers.}
+\NormalTok{label\_peaks }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(expression\_values, }\AttributeTok{adjacency\_threshold =} \DecValTok{1}\NormalTok{) \{}
+  
+  \CommentTok{\# Number of timepoints in the gene expression curve}
+\NormalTok{  number\_of\_timepoints }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(expression\_values)}
+  
+  \CommentTok{\# Starting with all timepoints unlabeled ({-}1)}
+\NormalTok{  peak\_labels }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, number\_of\_timepoints)}
+  
+  \CommentTok{\# Processing the timepoints from highest expression to lowest}
+  \CommentTok{\# (the idea is: assign labels starting from local maxima)}
+\NormalTok{  order\_from\_highest }\OtherTok{\textless{}{-}} \FunctionTok{order}\NormalTok{(expression\_values, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{)}
+  
+  \CommentTok{\# Countering to assign new peak labels}
+\NormalTok{  next\_peak\_label }\OtherTok{\textless{}{-}} \DecValTok{0}
+  
+  \CommentTok{\# Looping through timepoints in order of decreasing expression}
+  \ControlFlowTok{for}\NormalTok{ (time\_index }\ControlFlowTok{in}\NormalTok{ order\_from\_highest) \{}
+    
+    \CommentTok{\# Determining the neighboring timepoints within the threshold}
+\NormalTok{    neighbor\_indices }\OtherTok{\textless{}{-}}\NormalTok{ (time\_index }\SpecialCharTok{{-}}\NormalTok{ adjacency\_threshold)}\SpecialCharTok{:}\NormalTok{(time\_index }\SpecialCharTok{+}\NormalTok{ adjacency\_threshold)}
+\NormalTok{    neighbor\_indices }\OtherTok{\textless{}{-}}\NormalTok{ neighbor\_indices[neighbor\_indices }\SpecialCharTok{\textgreater{}=} \DecValTok{1} \SpecialCharTok{\&}
+\NormalTok{                                         neighbor\_indices }\SpecialCharTok{\textless{}=}\NormalTok{ number\_of\_timepoints]}
+    
+    \CommentTok{\# Checking if any neighbors already have a peak label}
+\NormalTok{    neighbor\_labels }\OtherTok{\textless{}{-}}\NormalTok{ peak\_labels[neighbor\_indices]}
+\NormalTok{    existing\_labels }\OtherTok{\textless{}{-}}\NormalTok{ neighbor\_labels[neighbor\_labels }\SpecialCharTok{!=} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
+    
+    \CommentTok{\# If a neighbor has a label, inherit that label}
+    \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(existing\_labels) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
+\NormalTok{      peak\_labels[time\_index] }\OtherTok{\textless{}{-}}\NormalTok{ existing\_labels[}\DecValTok{1}\NormalTok{]}
+      
+    \CommentTok{\# Otherwise, create a new peak label}
+\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{      peak\_labels[time\_index] }\OtherTok{\textless{}{-}}\NormalTok{ next\_peak\_label}
+\NormalTok{      next\_peak\_label }\OtherTok{\textless{}{-}}\NormalTok{ next\_peak\_label }\SpecialCharTok{+} \DecValTok{1}
+\NormalTok{    \}}
+\NormalTok{  \}}
+
+\CommentTok{\# 2.2(b2) {-}}
+
+\CommentTok{\# A representative peak mrans the highest timepoint in each label group}
+\NormalTok{  peak\_positions }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\FunctionTok{unique}\NormalTok{(peak\_labels), }\ControlFlowTok{function}\NormalTok{(label\_value) \{}
+\NormalTok{    indices\_in\_group }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(peak\_labels }\SpecialCharTok{==}\NormalTok{ label\_value)}
+\NormalTok{    indices\_in\_group[}\FunctionTok{which.max}\NormalTok{(expression\_values[indices\_in\_group])]}
+\NormalTok{  \})}
+  
+  \CommentTok{\# Returning both: all labels AND the final peak positions}
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{list}\NormalTok{(}
+    \AttributeTok{peak\_labels =}\NormalTok{ peak\_labels,}
+    \AttributeTok{peak\_positions =}\NormalTok{ peak\_positions}
+\NormalTok{  ))}
+\NormalTok{\}}
+
+
+\NormalTok{test\_gene }\OtherTok{\textless{}{-}}\NormalTok{ gene766}
+\NormalTok{peak\_result }\OtherTok{\textless{}{-}} \FunctionTok{label\_peaks}\NormalTok{(test\_gene, }\AttributeTok{adjacency\_threshold =} \DecValTok{2}\NormalTok{)}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Peak Labels for Each Timepoint (Gene 766):}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Peak Labels for Each Timepoint (Gene 766):
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(peak\_result}\SpecialCharTok{$}\NormalTok{peak\_labels)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 7 7 7 7 7 4 4 4 4 4 4 8 8 8 6 6 6 6 6 6 2 2 2 2 2 0 0 0 0 0 0 0 0 0 0 0 0 5
+## [39] 5 5 5 5 5 9 9 9 3 3 3 3 3 3 1 1 1 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Detected Peak Positions (Gene 766):}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Detected Peak Positions (Gene 766):
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(peak\_result}\SpecialCharTok{$}\NormalTok{peak\_positions)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]  3  6 12 18 23 28 38 44 50 54
+\end{verbatim}
+
+\textbf{c.}
+
+The code applies the previously defined peak-labelling function to gene
+766 for thresholds 1--4. For each threshold, expression values are
+labelled, representative peak positions are extracted, and the peak
+coordinates are overlaid on the expression curve in a separate plot.
+This produces four visualisations showing how the number and position of
+detected peaks change as the adjacency threshold increases.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Vector of thresholds to test}
+\NormalTok{adjacency\_values }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+
+\CommentTok{\# Extracting expression values of gene 766}
+\NormalTok{expression\_766 }\OtherTok{\textless{}{-}}\NormalTok{ gene766}
+
+\CommentTok{\# Loop over all adjacency thresholds}
+\ControlFlowTok{for}\NormalTok{ (adj }\ControlFlowTok{in}\NormalTok{ adjacency\_values) \{}
+  
+  \CommentTok{\# Run the peak detection function for this threshold}
+\NormalTok{  peak\_output }\OtherTok{\textless{}{-}} \FunctionTok{label\_peaks}\NormalTok{(expression\_766, }\AttributeTok{adjacency\_threshold =}\NormalTok{ adj)}
+  
+  \CommentTok{\# Extracting the detected peak positions}
+\NormalTok{  detected\_peaks }\OtherTok{\textless{}{-}}\NormalTok{ peak\_output}\SpecialCharTok{$}\NormalTok{peak\_positions}
+  
+  \CommentTok{\# Creating a plot for this threshold}
+  \FunctionTok{plot}\NormalTok{(expression\_766, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{, }\AttributeTok{col =} \StringTok{"black"}\NormalTok{,}
+       \AttributeTok{xlab =} \StringTok{"Timepoint"}\NormalTok{,}
+       \AttributeTok{ylab =} \StringTok{"Expression Level"}\NormalTok{,}
+       \AttributeTok{main =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Gene 766: Peak Detection (Adjacency ="}\NormalTok{, adj, }\StringTok{")"}\NormalTok{))}
+  
+  \CommentTok{\# Adding peak markers}
+  \FunctionTok{points}\NormalTok{(detected\_peaks,}
+\NormalTok{         expression\_766[detected\_peaks],}
+         \AttributeTok{col =} \StringTok{"red"}\NormalTok{,}
+         \AttributeTok{pch =} \DecValTok{19}\NormalTok{,}
+         \AttributeTok{cex =} \FloatTok{1.2}\NormalTok{)}
+  
+  \CommentTok{\# Labeling the peaks}
+  \FunctionTok{text}\NormalTok{(detected\_peaks,}
+\NormalTok{       expression\_766[detected\_peaks],}
+       \AttributeTok{labels =}\NormalTok{ detected\_peaks,}
+       \AttributeTok{pos =} \DecValTok{3}\NormalTok{,}
+       \AttributeTok{cex =} \FloatTok{0.8}\NormalTok{,}
+       \AttributeTok{col =} \StringTok{"blue"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{PDB_Assignment1_Exercise_2_files/figure-latex/unnamed-chunk-3-1.pdf}
+\includegraphics{PDB_Assignment1_Exercise_2_files/figure-latex/unnamed-chunk-3-2.pdf}
+\includegraphics{PDB_Assignment1_Exercise_2_files/figure-latex/unnamed-chunk-3-3.pdf}
+\includegraphics{PDB_Assignment1_Exercise_2_files/figure-latex/unnamed-chunk-3-4.pdf}
+
+The detected peak structures varied substantially across adjacency
+thresholds. With an adjacency threshold of 1, the algorithm produced
+many narrow peaks because only directly neighbouring time points were
+grouped together. This caused small fluctuations in expression to be
+interpreted as separate peak events.
+
+Increasing the threshold to 2 reduced the number of detected peaks and
+yielded clearer peak components, as closely spaced fluctuations were
+merged into coherent structures. When the threshold was increased
+further to 3 and 4, the results became nearly identical, with only a
+small set of broad peak regions remaining. At these higher thresholds,
+the algorithm merged most local variations, retaining only the major
+high-expression regions.
+
+Overall, an adjacency threshold of 2 appears best suited for the
+expression pattern of gene 766. This parameter balances sensitivity and
+peak stability by suppressing noise-driven fluctuations while still
+distinguishing biologically meaningful peaks that become overly merged
+at larger thresholds.
+
+\textbf{d.}
+
+Peak detection was performed for each of the four genes using an
+adjacency threshold of two time points, a value chosen based on the
+behaviour observed in part (c). The peak-labeling function was applied
+separately to each gene, producing the group labels and representative
+peak coordinates.
+
+A combined plot was generated by first drawing the expression profile of
+one gene to initialise the plotting window, followed by overlaying the
+expression curves of the remaining genes. The detected peak positions
+for each gene were then added as coloured point markers, with consistent
+colour assignments between the curves and the peak highlights. A legend
+was included to support interpretation of the four overlaid expression
+trajectories.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Peak detection for all four genes}
+\CommentTok{\# Using a reasonable adjacency threshold (chosen: 2)}
+\NormalTok{adjacency\_setting }\OtherTok{\textless{}{-}} \DecValTok{2}
+
+\CommentTok{\# Detecting peaks for each gene}
+\NormalTok{peaks\_766  }\OtherTok{\textless{}{-}} \FunctionTok{label\_peaks}\NormalTok{(gene766,  }\AttributeTok{adjacency\_threshold =}\NormalTok{ adjacency\_setting)}
+\NormalTok{peaks\_932  }\OtherTok{\textless{}{-}} \FunctionTok{label\_peaks}\NormalTok{(gene932,  }\AttributeTok{adjacency\_threshold =}\NormalTok{ adjacency\_setting)}
+\NormalTok{peaks\_3297 }\OtherTok{\textless{}{-}} \FunctionTok{label\_peaks}\NormalTok{(gene3297, }\AttributeTok{adjacency\_threshold =}\NormalTok{ adjacency\_setting)}
+\NormalTok{peaks\_4685 }\OtherTok{\textless{}{-}} \FunctionTok{label\_peaks}\NormalTok{(gene4685, }\AttributeTok{adjacency\_threshold =}\NormalTok{ adjacency\_setting)}
+
+
+\CommentTok{\# combined plot all genes with their peaks}
+
+\FunctionTok{plot}\NormalTok{(gene766, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{col=}\StringTok{"blue"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{,}
+     \AttributeTok{ylim =} \FunctionTok{range}\NormalTok{(selected\_data[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{], }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+     \AttributeTok{xlab=}\StringTok{"Timepoint"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Expression Level"}\NormalTok{,}
+     \AttributeTok{main=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Expression and Peak Positions (Adjacency ="}\NormalTok{, adjacency\_setting, }\StringTok{")"}\NormalTok{))}
+
+\FunctionTok{lines}\NormalTok{(gene932,  }\AttributeTok{col=}\StringTok{"red"}\NormalTok{,       }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(gene3297, }\AttributeTok{col=}\StringTok{"darkgreen"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(gene4685, }\AttributeTok{col=}\StringTok{"black"}\NormalTok{,  }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+
+\CommentTok{\# Adding the peak markers for each gene}
+\FunctionTok{points}\NormalTok{(peaks\_766}\SpecialCharTok{$}\NormalTok{peak\_positions,  gene766[peaks\_766}\SpecialCharTok{$}\NormalTok{peak\_positions], }
+       \AttributeTok{col=}\StringTok{"blue"}\NormalTok{, }\AttributeTok{pch=}\DecValTok{19}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(peaks\_932}\SpecialCharTok{$}\NormalTok{peak\_positions,  gene932[peaks\_932}\SpecialCharTok{$}\NormalTok{peak\_positions], }
+       \AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{pch=}\DecValTok{19}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(peaks\_3297}\SpecialCharTok{$}\NormalTok{peak\_positions, gene3297[peaks\_3297}\SpecialCharTok{$}\NormalTok{peak\_positions], }
+       \AttributeTok{col=}\StringTok{"darkgreen"}\NormalTok{, }\AttributeTok{pch=}\DecValTok{19}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(peaks\_4685}\SpecialCharTok{$}\NormalTok{peak\_positions, gene4685[peaks\_4685}\SpecialCharTok{$}\NormalTok{peak\_positions], }
+       \AttributeTok{col=}\StringTok{"black"}\NormalTok{, }\AttributeTok{pch=}\DecValTok{19}\NormalTok{)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{xpd =} \ConstantTok{NA}\NormalTok{) }\CommentTok{\#allowing drawing outside plot}
+\CommentTok{\# Adding legend}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{inset =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.095}\NormalTok{, }\DecValTok{0}\NormalTok{),}
+       \AttributeTok{legend=}\FunctionTok{c}\NormalTok{(}\StringTok{"766"}\NormalTok{,}\StringTok{"932"}\NormalTok{,}\StringTok{"3297"}\NormalTok{,}\StringTok{"4685"}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{, }\StringTok{"red"}\NormalTok{, }\StringTok{"darkgreen"}\NormalTok{, }\StringTok{"black"}\NormalTok{), }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{pch=}\DecValTok{19}\NormalTok{,}\AttributeTok{cex =}\FloatTok{0.8}\NormalTok{, }\AttributeTok{bg =} \StringTok{"white"}\NormalTok{, }\AttributeTok{bty =} \StringTok{"o"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{PDB_Assignment1_Exercise_2_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+Yes. The expression profiles of the four genes show a consistent pattern
+of periodic behaviour. Across the measured time points, each gene
+exhibits repeated phases of up-regulation followed by down-regulation,
+indicating that their transcription is not constant but instead follows
+a cyclic pattern. Such recurring regulatory changes are characteristic
+of genes whose activity is coordinated with the cell cycle. The periodic
+structure of the expression curves therefore suggests that these genes
+are controlled in a phase-dependent manner, becoming up-regulated when
+their function is required and down-regulated once that stage of the
+cycle has passed.
+
+The progression of the detected peaks shows that the four genes do not
+reach maximal expression at the same time but instead display shifted
+activation across the cell-cycle time course. This temporal separation
+indicates that the genes operate in different regulatory phases. Gene
+766 peaks earliest, suggesting involvement in early cell-cycle
+processes, while genes 932 and 3297 peak later, consistent with
+mid-cycle activity. Gene 4685 shows its highest expression toward the
+end of the cycle, implying a late-phase role. Overall, the sequential
+arrangement of peaks reflects phase-specific gene activation
+characteristic of cell-cycle regulation.
+
+\end{document}

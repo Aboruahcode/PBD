@@ -1,0 +1,291 @@
+---
+title: "PDB_Assignment1_Exercise_2"
+output:
+  pdf_document: 
+    keep_tex: true
+  html_document: default
+date: "2025-11-14"
+header-includes:
+  - \usepackage{tcolorbox}
+---
+
+
+\begin{center}
+\begin{tcolorbox}[colback=white, colframe=black, width=0.8\textwidth]
+
+\textbf{Name1: Adwitiya Argha Priyadarshini Boruah}\\
+\textbf{Matriculation No. 1: 7070291}\\
+\textbf{Email1: adbo00002@stud.uni-saarland.de}
+
+\vspace{0.7cm}
+
+\textbf{Name2: Md Mobashir Rahman}\\
+\textbf{Matriculation No. 2: 7059086}\\
+\textbf{Email2: mdra00001@stud.uni-saarland.de}
+
+\end{tcolorbox}
+\end{center}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Exercise 2.2: Detecting peaks in cell-cycle expression data**
+
+***a.***
+
+The code begins by importing the expression dataset stored in a TSV file, where the first column contains gene identifiers and the remaining columns contain time-series expression measurements. The first column is renamed to ID to improve readability and ensure consistent referencing in later steps.
+
+A subset of the dataset is then created by selecting the four assignment-specified genes (766, 932, 3297, 4685). For each selected gene, the corresponding row is extracted and converted into a numeric vector representing its expression profile across all time points.
+
+To visualise the temporal expression patterns, the expression curve of gene 766 is plotted first, with axis limits determined from all four genes to maintain a common scale. The remaining gene profiles are then added to the same figure using additional line layers, each displayed in a different colour. Finally, a legend is included to indicate which colour corresponds to each gene, enabling straightforward interpretation of the combined time-series plot.
+
+```{r}
+
+# loading the expression data
+
+#the dataset is stored as a TSV file where- the first column contains gene IDs, the remaining columns contain expression values over time, the file already contains a header row.
+
+expression_data <- read.table("periodic_gene_expression.tsv",
+                              header = TRUE,
+                              sep = "\t",
+                              check.names = FALSE)
+
+# the first column corresponds to the gene identifiers.
+#to make the later code readable, Renaming the first column to "ID"
+
+colnames(expression_data)[1] <- "ID"
+
+
+# selecting the 4 genes of interest
+
+#these four specific genes are provided in the assignment.
+
+genes_of_interest <- c(766, 932, 3297, 4685)
+
+#then extracting only the rows whose gene ID matches one of the four
+selected_data <- expression_data[expression_data$ID %in% genes_of_interest, ]
+
+# displaying the extracted rows to confirm successful selection
+print(selected_data)
+
+
+
+#extracting the time series of each gene
+
+#for each selected gene, expression values are extracted
+# i.e. all columns except the ID column
+#then converting them to numeric to ensure the correct plotting
+gene766  <- as.numeric(selected_data[selected_data$ID == 766,  -1])
+gene932  <- as.numeric(selected_data[selected_data$ID == 932,  -1])
+gene3297 <- as.numeric(selected_data[selected_data$ID == 3297, -1])
+gene4685 <- as.numeric(selected_data[selected_data$ID == 4685, -1])
+
+
+# plotting the Expression time series of the four genes
+#starting by plotting the gene 766 alone
+# the y axis limits are defined using all four genes so that
+# the curves fit together on the same scale.
+plot(gene766, type = "l", col = "blue", lwd = 2,
+     ylim = range(selected_data[,-1], na.rm = TRUE),
+     xlab = "Timepoint", ylab = "Expression",
+     main = "Expression of Genes 766, 932, 3297, 4685")
+
+#then adding the remaining three gene curves using lines()
+lines(gene932,  col = "red",       lwd = 2)
+lines(gene3297, col = "darkgreen", lwd = 2)
+lines(gene4685, col = "black",    lwd = 2)
+
+par(xpd = NA) #allowing drawing outside plot
+# A legend is added to indicate which color corresponds to which gene
+legend("topright", inset = c(-0.095, 0),
+       legend=c("766","932","3297","4685"),
+       col=c("blue", "red", "darkgreen", "black"), lwd=2, pch=19,cex =0.8, bg = "white", bty = "o")
+
+```
+
+**b.**
+***1.***
+
+The code implements the peak-labelling procedure by assigning labels to time points according to their expression values and a chosen adjacency threshold. The function first determines the number of time points and creates a vector in which all positions are initially unlabeled. The expression values are then ordered from highest to lowest so that labeling begins at the largest local maxima.
+For each time point in this ordered list, neighbouring indices within the specified adjacency threshold are identified. If any neighbouring positions already carry a label, that label is inherited; otherwise, a new label is created. This procedure groups adjacent high-expression points into peak components.
+
+**2.**
+
+After all points are labelled, representative peak positions are extracted by selecting, within each label group, the time point with the maximum expression value. The function returns the complete set of labels as well as the final peak coordinates. The code is then applied to gene 766 with an adjacency threshold of 2, and the corresponding peak labels and representative peak positions are printed.
+
+```{r}
+
+# 2.2(b1) — 
+
+# This function groups timepoints into peaks based on:
+# - their expression height
+# - an adjacency threshold
+# It returns a label for each timepoint and the peak centers.
+label_peaks <- function(expression_values, adjacency_threshold = 1) {
+  
+  # Number of timepoints in the gene expression curve
+  number_of_timepoints <- length(expression_values)
+  
+  # Starting with all timepoints unlabeled (-1)
+  peak_labels <- rep(-1, number_of_timepoints)
+  
+  # Processing the timepoints from highest expression to lowest
+  # (the idea is: assign labels starting from local maxima)
+  order_from_highest <- order(expression_values, decreasing = TRUE)
+  
+  # Countering to assign new peak labels
+  next_peak_label <- 0
+  
+  # Looping through timepoints in order of decreasing expression
+  for (time_index in order_from_highest) {
+    
+    # Determining the neighboring timepoints within the threshold
+    neighbor_indices <- (time_index - adjacency_threshold):(time_index + adjacency_threshold)
+    neighbor_indices <- neighbor_indices[neighbor_indices >= 1 &
+                                         neighbor_indices <= number_of_timepoints]
+    
+    # Checking if any neighbors already have a peak label
+    neighbor_labels <- peak_labels[neighbor_indices]
+    existing_labels <- neighbor_labels[neighbor_labels != -1]
+    
+    # If a neighbor has a label, inherit that label
+    if (length(existing_labels) > 0) {
+      peak_labels[time_index] <- existing_labels[1]
+      
+    # Otherwise, create a new peak label
+    } else {
+      peak_labels[time_index] <- next_peak_label
+      next_peak_label <- next_peak_label + 1
+    }
+  }
+
+# 2.2(b2) -
+
+# A representative peak mrans the highest timepoint in each label group
+  peak_positions <- sapply(unique(peak_labels), function(label_value) {
+    indices_in_group <- which(peak_labels == label_value)
+    indices_in_group[which.max(expression_values[indices_in_group])]
+  })
+  
+  # Returning both: all labels AND the final peak positions
+  return(list(
+    peak_labels = peak_labels,
+    peak_positions = peak_positions
+  ))
+}
+
+
+test_gene <- gene766
+peak_result <- label_peaks(test_gene, adjacency_threshold = 2)
+
+cat("\nPeak Labels for Each Timepoint (Gene 766):\n")
+print(peak_result$peak_labels)
+cat("\nDetected Peak Positions (Gene 766):\n")
+print(peak_result$peak_positions)
+```
+
+**c.**
+
+The code applies the previously defined peak-labelling function to gene 766 for thresholds 1–4.
+For each threshold, expression values are labelled, representative peak positions are extracted, and the peak coordinates are overlaid on the expression curve in a separate plot.
+This produces four visualisations showing how the number and position of detected peaks change as the adjacency threshold increases.
+
+```{r}
+
+# Vector of thresholds to test
+adjacency_values <- c(1, 2, 3, 4)
+
+# Extracting expression values of gene 766
+expression_766 <- gene766
+
+# Loop over all adjacency thresholds
+for (adj in adjacency_values) {
+  
+  # Run the peak detection function for this threshold
+  peak_output <- label_peaks(expression_766, adjacency_threshold = adj)
+  
+  # Extracting the detected peak positions
+  detected_peaks <- peak_output$peak_positions
+  
+  # Creating a plot for this threshold
+  plot(expression_766, type = "l", lwd = 2, col = "black",
+       xlab = "Timepoint",
+       ylab = "Expression Level",
+       main = paste("Gene 766: Peak Detection (Adjacency =", adj, ")"))
+  
+  # Adding peak markers
+  points(detected_peaks,
+         expression_766[detected_peaks],
+         col = "red",
+         pch = 19,
+         cex = 1.2)
+  
+  # Labeling the peaks
+  text(detected_peaks,
+       expression_766[detected_peaks],
+       labels = detected_peaks,
+       pos = 3,
+       cex = 0.8,
+       col = "blue")
+}
+```
+
+The detected peak structures varied substantially across adjacency thresholds. With an adjacency threshold of 1, the algorithm produced many narrow peaks because only directly neighbouring time points were grouped together. This caused small fluctuations in expression to be interpreted as separate peak events. 
+
+Increasing the threshold to 2 reduced the number of detected peaks and yielded clearer peak components, as closely spaced fluctuations were merged into coherent structures. When the threshold was increased further to 3 and 4, the results became nearly identical, with only a small set of broad peak regions remaining. At these higher thresholds, the algorithm merged most local variations, retaining only the major high-expression regions.
+
+Overall, an adjacency threshold of 2 appears best suited for the expression pattern of gene 766. This parameter balances sensitivity and peak stability by suppressing noise-driven fluctuations while still distinguishing biologically meaningful peaks that become overly merged at larger thresholds.
+
+
+**d.**
+
+Peak detection was performed for each of the four genes using an adjacency threshold of two time points, a value chosen based on the behaviour observed in part (c). The peak-labeling function was applied separately to each gene, producing the group labels and representative peak coordinates.
+
+A combined plot was generated by first drawing the expression profile of one gene to initialise the plotting window, followed by overlaying the expression curves of the remaining genes. The detected peak positions for each gene were then added as coloured point markers, with consistent colour assignments between the curves and the peak highlights. A legend was included to support interpretation of the four overlaid expression trajectories.
+
+```{r}
+# Peak detection for all four genes
+# Using a reasonable adjacency threshold (chosen: 2)
+adjacency_setting <- 2
+
+# Detecting peaks for each gene
+peaks_766  <- label_peaks(gene766,  adjacency_threshold = adjacency_setting)
+peaks_932  <- label_peaks(gene932,  adjacency_threshold = adjacency_setting)
+peaks_3297 <- label_peaks(gene3297, adjacency_threshold = adjacency_setting)
+peaks_4685 <- label_peaks(gene4685, adjacency_threshold = adjacency_setting)
+
+
+# combined plot all genes with their peaks
+
+plot(gene766, type="l", col="blue", lwd=2,
+     ylim = range(selected_data[,-1], na.rm = TRUE),
+     xlab="Timepoint", ylab="Expression Level",
+     main=paste("Expression and Peak Positions (Adjacency =", adjacency_setting, ")"))
+
+lines(gene932,  col="red",       lwd=2)
+lines(gene3297, col="darkgreen", lwd=2)
+lines(gene4685, col="black",  lwd=2)
+
+# Adding the peak markers for each gene
+points(peaks_766$peak_positions,  gene766[peaks_766$peak_positions], 
+       col="blue", pch=19)
+points(peaks_932$peak_positions,  gene932[peaks_932$peak_positions], 
+       col="red", pch=19)
+points(peaks_3297$peak_positions, gene3297[peaks_3297$peak_positions], 
+       col="darkgreen", pch=19)
+points(peaks_4685$peak_positions, gene4685[peaks_4685$peak_positions], 
+       col="black", pch=19)
+
+par(xpd = NA) #allowing drawing outside plot
+# Adding legend
+legend("topright", inset = c(-0.095, 0),
+       legend=c("766","932","3297","4685"),
+       col=c("blue", "red", "darkgreen", "black"), lwd=2, pch=19,cex =0.8, bg = "white", bty = "o")
+```
+
+Yes. The expression profiles of the four genes show a consistent pattern of periodic behaviour. Across the measured time points, each gene exhibits repeated phases of up-regulation followed by down-regulation, indicating that their transcription is not constant but instead follows a cyclic pattern. Such recurring regulatory changes are characteristic of genes whose activity is coordinated with the cell cycle. The periodic structure of the expression curves therefore suggests that these genes are controlled in a phase-dependent manner, becoming up-regulated when their function is required and down-regulated once that stage of the cycle has passed.
+
+The progression of the detected peaks shows that the four genes do not reach maximal expression at the same time but instead display shifted activation across the cell-cycle time course. This temporal separation indicates that the genes operate in different regulatory phases. Gene 766 peaks earliest, suggesting involvement in early cell-cycle processes, while genes 932 and 3297 peak later, consistent with mid-cycle activity. Gene 4685 shows its highest expression toward the end of the cycle, implying a late-phase role. Overall, the sequential arrangement of peaks reflects phase-specific gene activation characteristic of cell-cycle regulation.
+
+
