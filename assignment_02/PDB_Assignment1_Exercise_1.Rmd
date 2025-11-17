@@ -119,8 +119,12 @@ distance_matrix <- stats::dist(t(methylation_matrix), method = "euclidean")
 
 #converting to matrix for easier indexing
 distance_matrix <- as.matrix(distance_matrix)
+pairwise_distances <- distance_matrix[c("HSC", "CD8", "MTAC"), c("HSC", "CD8", "MTAC")]
+pairwise_distances
 ```
 This produces a full pairwise distance matrix, where small values indicate similar methylation patterns and large values indicate dissimilar cell types.
+HSC and CD8 show a moderate distance (46.06), indicating similarity within the blood lineage.
+MTAC (skin lineage) is much further from both HSC (78.55) and CD8 (81.78),which reflects clear separation between blood and skin methylation profiles.
 
 **c.2.**
 

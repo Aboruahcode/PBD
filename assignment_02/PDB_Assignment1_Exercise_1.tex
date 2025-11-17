@@ -357,12 +357,24 @@ that each column that is the cell type was treated as a sample.
 
 \CommentTok{\#converting to matrix for easier indexing}
 \NormalTok{distance\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(distance\_matrix)}
+\NormalTok{pairwise\_distances }\OtherTok{\textless{}{-}}\NormalTok{ distance\_matrix[}\FunctionTok{c}\NormalTok{(}\StringTok{"HSC"}\NormalTok{, }\StringTok{"CD8"}\NormalTok{, }\StringTok{"MTAC"}\NormalTok{), }\FunctionTok{c}\NormalTok{(}\StringTok{"HSC"}\NormalTok{, }\StringTok{"CD8"}\NormalTok{, }\StringTok{"MTAC"}\NormalTok{)]}
+\NormalTok{pairwise\_distances}
 \end{Highlighting}
 \end{Shaded}
 
+\begin{verbatim}
+##           HSC      CD8     MTAC
+## HSC   0.00000 46.06283 78.55019
+## CD8  46.06283  0.00000 81.77717
+## MTAC 78.55019 81.77717  0.00000
+\end{verbatim}
+
 This produces a full pairwise distance matrix, where small values
 indicate similar methylation patterns and large values indicate
-dissimilar cell types.
+dissimilar cell types. HSC and CD8 show a moderate distance (46.06),
+indicating similarity within the blood lineage. MTAC (skin lineage) is
+much further from both HSC (78.55) and CD8 (81.78),which reflects clear
+separation between blood and skin methylation profiles.
 
 \textbf{c.2.}
 
