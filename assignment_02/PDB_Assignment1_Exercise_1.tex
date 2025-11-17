@@ -1,0 +1,496 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{tcolorbox}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={PDB Assignment 2 Exercise 2.1},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{PDB Assignment 2 Exercise 2.1}
+\author{}
+\date{\vspace{-2.5em}2025-11-14}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\begin{tcolorbox}[colback=white, colframe=black, width=0.8\textwidth]
+
+\textbf{Name1: Adwitiya Argha Priyadarshini Boruah}\\
+\textbf{Matriculation No. 1: 7070291}\\
+\textbf{Email1: adbo00002@stud.uni-saarland.de}
+
+\vspace{0.7cm}
+
+\textbf{Name2: Md Mobashir Rahman}\\
+\textbf{Matriculation No. 2: 7059086}\\
+\textbf{Email2: mdra00001@stud.uni-saarland.de}
+
+\end{tcolorbox}
+\end{center}
+
+\textbf{Exercise 2.1: DNA methylation in hematopoieses and clustering}
+
+\textbf{\emph{a.}}
+
+The file ``methylation.csv'' contains average DNA methylation levels for
+many genomic regions across different multiple blood and skin cell
+types. Before analysis, several formatting must be corrected.
+Methylation values are stored with commas instead of decimal points, and
+missing entries are represented by ``.'', which prevents direct
+numerical conversion. All the methylation columns (columns 7-26) are
+therefore processed by replacing ``.'' with missing values, converting
+commas to decimal points, and transforming the netries into numeric
+format. Missing methylation values are then set to 0, as required in the
+assignment, THe first six cilumns containing genomic annotations remain
+unchanged. This results in a fully numeric methylation matrix suitable
+for computing distances and performing heirarchical clustering in the
+subsequent tasks.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+## v dplyr     1.1.4     v readr     2.1.5
+## v forcats   1.0.0     v stringr   1.5.1
+## v ggplot2   3.5.1     v tibble    3.2.1
+## v lubridate 1.9.3     v tidyr     1.3.1
+## v purrr     1.0.2     
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(knitr)}
+
+\CommentTok{\#Reading the raw methylation file}
+\CommentTok{\#the file uses semicolons instead of commas}
+\NormalTok{raw\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_delim}\NormalTok{(}\StringTok{"methylation.csv"}\NormalTok{, }\AttributeTok{delim =} \StringTok{";"}\NormalTok{, }\AttributeTok{col\_types =} \FunctionTok{cols}\NormalTok{(}\AttributeTok{.default =} \StringTok{"c"}\NormalTok{))}
+
+\CommentTok{\#Identifying the methylation colums}
+\CommentTok{\#columns 1{-}6 are annotation, column 7 onwards it is numeric}
+\NormalTok{methylation\_columns }\OtherTok{\textless{}{-}} \FunctionTok{colnames}\NormalTok{(raw\_data)[}\DecValTok{7}\SpecialCharTok{:}\FunctionTok{ncol}\NormalTok{(raw\_data)]}
+
+\CommentTok{\#making a copy of the data for cleaning}
+\NormalTok{clean\_data }\OtherTok{\textless{}{-}}\NormalTok{ raw\_data}
+
+\CommentTok{\#Cleaning methylation columns:}
+\CommentTok{\# {-}replacing "." with NA (missing), replacing "," with "." (decimal), converting to numeric}
+\NormalTok{clean\_data[methylation\_columns] }\OtherTok{\textless{}{-}}\NormalTok{ clean\_data[methylation\_columns] }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{everything}\NormalTok{(), }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .x }
+                \SpecialCharTok{\%\textgreater{}\%} \FunctionTok{na\_if}\NormalTok{(}\StringTok{"."}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\#"." {-}\textgreater{} NA}
+                  \FunctionTok{str\_replace}\NormalTok{(}\StringTok{","}\NormalTok{, }\StringTok{"."}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\#"0,842" {-}\textgreater{} "0.842"}
+                  \FunctionTok{as.numeric}\NormalTok{())) }\CommentTok{\#converting to numeric}
+
+\CommentTok{\#replacing the missing values in methylation columns with 0.}
+\NormalTok{clean\_data[methylation\_columns][}\FunctionTok{is.na}\NormalTok{(clean\_data[methylation\_columns])] }\OtherTok{\textless{}{-}} \DecValTok{0}
+\FunctionTok{write\_csv}\NormalTok{(clean\_data, }\StringTok{"methylation\_clean.csv"}\NormalTok{)}
+
+\NormalTok{clean\_data }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{select}\NormalTok{(chrom, chromStart, chromEnd, geneName, HSC, MPP1, MPP2) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{head}\NormalTok{(}\DecValTok{10}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}llllrrr@{}}
+\toprule\noalign{}
+chrom & chromStart & chromEnd & geneName & HSC & MPP1 & MPP2 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+chr1 & 3027000 & 3028000 & NA & 0.815 & 0.840 & 0.831 \\
+chr1 & 3140000 & 3141000 & NA & 0.822 & 0.831 & 0.897 \\
+chr1 & 3266000 & 3267000 & NA & 0.941 & 0.954 & 0.953 \\
+chr1 & 3291000 & 3292000 & NA & 0.889 & 0.881 & 0.881 \\
+chr1 & 3334000 & 3335000 & NA & 0.808 & 0.829 & 0.828 \\
+chr1 & 3612000 & 3613000 & NA & 0.935 & 0.937 & 0.943 \\
+chr1 & 3660000 & 3661000 & NA & 0.031 & 0.018 & 0.021 \\
+chr1 & 3661000 & 3662000 & Xkr4 & 0.020 & 0.014 & 0.010 \\
+chr1 & 3681000 & 3682000 & NA & 0.809 & 0.837 & 0.844 \\
+chr1 & 3835000 & 3836000 & NA & 0.963 & 0.936 & 0.928 \\
+\end{longtable}
+
+\textbf{b.}
+
+Average methylation levels for each cell tpe were obtained by taking the
+mean across all genomic regions in the cleaned dataset. All annotation
+columns were excluded, adn only methylation columns (columns 7-26) were
+summarised. The resulting values represent the global methylation of
+each cell type . The computed averages were stroed for later analysis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#now loading the cleaned dataset}
+\NormalTok{clean\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"methylation\_clean.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 95086 Columns: 26
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (3): chrom, geneName, ensemblId
+## dbl (23): chromStart, chromEnd, name, cpgMinCoverage, HSC, MPP1, MPP2, CLP, ...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#identifying the methylation columsn again}
+\NormalTok{methylation\_columns\_clean }\OtherTok{\textless{}{-}} \FunctionTok{colnames}\NormalTok{(clean\_data)[}\DecValTok{8}\SpecialCharTok{:}\FunctionTok{ncol}\NormalTok{(clean\_data)]}
+
+\NormalTok{mean\_methylation }\OtherTok{\textless{}{-}}\NormalTok{ clean\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(methylation\_columns\_clean), mean))}
+
+\FunctionTok{t}\NormalTok{(mean\_methylation)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             [,1]
+## HSC    0.5961406
+## MPP1   0.6170356
+## MPP2   0.6288504
+## CLP    0.6402188
+## CMP    0.6417423
+## GMP    0.6350850
+## MEP    0.6070041
+## CD4    0.6469553
+## CD8    0.6480897
+## B_cell 0.6460829
+## Eryth  0.5164726
+## Granu  0.6211135
+## Mono   0.6259272
+## TBSC   0.5682913
+## ABSC   0.5694599
+## MTAC   0.5382875
+## CLDC   0.5465432
+## EPro   0.5850959
+## EDif   0.5822801
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{write\_csv}\NormalTok{(mean\_methylation, }\StringTok{"mean\_methylation.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Global methylation averages were calculated for each cell type to
+compare epigenetic patterns across hematopoietic and skin lineages.
+Early blood progenitors (HSC: 0.596, MPP1: 0.617, MPP2: 0.629) showed
+relatively low methylation, whereas differentiated immune cell types
+such as CLP (0.640), CMP (0.642), GMP (0.636), CD4 (0.647), CD8 (0.648),
+B-cell (0.646), granulocytes (0.621) and monocytes (0.626) displayed
+higher methylation levels. This trend reflects the general principle
+that methylation increases during lineage commitment as developmental
+potential decreases.
+
+The erythroid lineage (EPro: 0.586, EDif: 0.582, Eryth: 0.516) deviated
+from this pattern by exhibiting notably lower methylation levels. This
+behaviour is characteristic of erythroid differentiation, which involves
+lineage-specific demethylation and activation of erythroid regulatory
+programs.
+
+Skin-derived cell types (TBSC: 0.569, ABSC: 0.569, MTAC: 0.538, CLDC:
+0.547) formed a distinct group with relatively high and internally
+consistent methylation levels, clearly separating them from the
+hematopoietic lineage. These observations agree with the developmental
+structure shown in Figure 1 and indicate that average methylation levels
+capture major differences between cell lineages, even though specific
+lineages do not follow a perfectly monotonic trend.
+
+Different genomic regions follow characteristic methylation patterns.
+Promoter CpG islands of active genes are usually unmethylated, while
+promoters of genes that are switched off become methylated during
+differentiation. Active enhancers also tend to be hypomethylated,
+whereas inactive enhancers show higher methylation levels. Gene bodies
+typically carry moderate methylation, which can be associated with
+ongoing transcription. In contrast, intergenic regions are generally
+highly methylated to prevent unwanted transcription. These regional
+patterns help explain why global methylation increases as cells become
+more specialized: more promoters and enhancers become permanently
+silenced during lineage commitment.
+
+\textbf{c.1.}
+
+To compare methylation patterns between cell types, the methylation
+matrix was first constructed by selecting all methylation columns (one
+column per cell type). Each column therefore represents the methylation
+profile of that cell type across all genomic regions. Euclidean
+distances between all pairs of cell types were then computed. Since
+dist() calculates distances between rows, the matrix was transposed so
+that each column that is the cell type was treated as a sample.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#identifying methylation column i.e. the cell types}
+\NormalTok{cell\_type\_columns }\OtherTok{\textless{}{-}} \FunctionTok{colnames}\NormalTok{(clean\_data)[}\DecValTok{8}\SpecialCharTok{:}\FunctionTok{ncol}\NormalTok{(clean\_data)]}
+
+\CommentTok{\#building a numeric matrix of methylation values}
+\CommentTok{\#rows are genomic regions, columns are cell types}
+\NormalTok{methylation\_matrix }\OtherTok{\textless{}{-}}\NormalTok{ clean\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(cell\_type\_columns))  }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{as.matrix}\NormalTok{()}
+
+\CommentTok{\#computing euclidean distance between cell types}
+\CommentTok{\#transpose is required because dist() computes row distances}
+\NormalTok{distance\_matrix }\OtherTok{\textless{}{-}}\NormalTok{ stats}\SpecialCharTok{::}\FunctionTok{dist}\NormalTok{(}\FunctionTok{t}\NormalTok{(methylation\_matrix), }\AttributeTok{method =} \StringTok{"euclidean"}\NormalTok{)}
+
+\CommentTok{\#converting to matrix for easier indexing}
+\NormalTok{distance\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(distance\_matrix)}
+\end{Highlighting}
+\end{Shaded}
+
+This produces a full pairwise distance matrix, where small values
+indicate similar methylation patterns and large values indicate
+dissimilar cell types.
+
+\textbf{c.2.}
+
+To merge clusters during hierarchical clustering, the average linkage
+criterion was implemented.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#average linkage between the two clusters A and B}
+\CommentTok{\#A and B are character vectors containing cell type names}
+\NormalTok{average\_linkage }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(A, B, distance\_matrix)\{}
+  
+  \CommentTok{\#extracting distances for all combinations a € A, b € B}
+\NormalTok{  pairwise\_distances }\OtherTok{\textless{}{-}}\NormalTok{ distance\_matrix[A, B]}
+  
+  \CommentTok{\#computing the average of these distances}
+  \FunctionTok{mean}\NormalTok{(pairwise\_distances)}
+\NormalTok{\} }\CommentTok{\#A small value of L(A,B) means the two clusters are very similar.}
+\end{Highlighting}
+\end{Shaded}
+
+This function enables the clustering algorithm to evaluate the
+similarity between any two sets of cell types and choose the pair that
+should merge next.
+
+\textbf{c.3.}
+
+Each cell type was initialized as its own cluster. At every iteration,
+all currently existing clusters were compared, and the pair with the
+smallest average linkage value was merged. This procedure was repeated
+until only one cluster remained. For every merge, the algorithm
+printed:- * the two clusters being merged * their linkage value * the
+updated clustering structure
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#initialising clusters: each cell types is its own cluster which is a list with 1 element}
+\NormalTok{clusters }\OtherTok{\textless{}{-}} \FunctionTok{as.list}\NormalTok{(cell\_type\_columns)}
+\FunctionTok{names}\NormalTok{(clusters) }\OtherTok{\textless{}{-}}\NormalTok{ cell\_type\_columns}
+
+\NormalTok{merge\_history }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{() }\CommentTok{\#to save the sequence of merges}
+
+\ControlFlowTok{while}\NormalTok{ (}\FunctionTok{length}\NormalTok{(clusters) }\SpecialCharTok{\textgreater{}} \DecValTok{1}\NormalTok{) \{}
+\NormalTok{  cluster\_names }\OtherTok{\textless{}{-}}  \FunctionTok{names}\NormalTok{(clusters)}
+\NormalTok{  best\_A }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+\NormalTok{  best\_B }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+\NormalTok{  best\_L }\OtherTok{\textless{}{-}} \ConstantTok{Inf}
+  
+  \CommentTok{\#comparing all paired of clusters}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{(}\FunctionTok{length}\NormalTok{(clusters) }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{)) \{}
+    \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in}\NormalTok{(i }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(clusters)) \{}
+\NormalTok{      A }\OtherTok{\textless{}{-}}\NormalTok{ clusters[[i]]}
+\NormalTok{      B }\OtherTok{\textless{}{-}}\NormalTok{ clusters[[j]]}
+      
+      \CommentTok{\#now computing average linkage}
+\NormalTok{      Linkage\_average\_value }\OtherTok{\textless{}{-}}  \FunctionTok{average\_linkage}\NormalTok{(A, B, distance\_matrix)}
+      \CommentTok{\#keeping track of smallest linkage}
+      \ControlFlowTok{if}\NormalTok{ (Linkage\_average\_value }\SpecialCharTok{\textless{}}\NormalTok{ best\_L) \{}
+\NormalTok{        best\_L }\OtherTok{\textless{}{-}}\NormalTok{ Linkage\_average\_value}
+\NormalTok{        best\_A }\OtherTok{\textless{}{-}}\NormalTok{ cluster\_names[i]}
+\NormalTok{        best\_B }\OtherTok{\textless{}{-}}\NormalTok{ cluster\_names[j]}
+\NormalTok{      \}}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  
+  \CommentTok{\#printing result of this merge}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"Merging:"}\NormalTok{, best\_A,}\StringTok{"and"}\NormalTok{, best\_B, }\StringTok{"with L ="}\NormalTok{, best\_L, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  
+  \CommentTok{\#saving merge}
+\NormalTok{  merge\_history }\OtherTok{\textless{}{-}} \FunctionTok{append}\NormalTok{(merge\_history, }\FunctionTok{list}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\AttributeTok{A =}\NormalTok{ best\_A, }\AttributeTok{B =}\NormalTok{ best\_B, }\AttributeTok{L =}\NormalTok{ best\_L)))}
+  
+  \CommentTok{\#merging the clusters}
+\NormalTok{  new\_cluster }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(clusters[[best\_A]], clusters[[best\_B]])}
+\NormalTok{  clusters[[best\_A]] }\OtherTok{\textless{}{-}}\NormalTok{ new\_cluster}
+\NormalTok{  clusters[[best\_B]] }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Merging: MPP2 and CMP with L = 15.64175 
+## Merging: CD4 and CD8 with L = 16.09429 
+## Merging: MPP2 and GMP with L = 19.60319 
+## Merging: MPP2 and CLP with L = 22.20841 
+## Merging: MPP2 and B_cell with L = 23.97957 
+## Merging: MPP2 and Granu with L = 25.23867 
+## Merging: EPro and EDif with L = 25.62158 
+## Merging: MPP2 and MEP with L = 26.45399 
+## Merging: MPP2 and CD4 with L = 28.34874 
+## Merging: MPP1 and MPP2 with L = 31.34756 
+## Merging: TBSC and ABSC with L = 33.76158 
+## Merging: MPP1 and Mono with L = 36.51274 
+## Merging: TBSC and CLDC with L = 37.88632 
+## Merging: TBSC and EPro with L = 38.61244 
+## Merging: HSC and MPP1 with L = 41.67949 
+## Merging: TBSC and MTAC with L = 44.26883 
+## Merging: HSC and TBSC with L = 71.58857 
+## Merging: HSC and Eryth with L = 76.52372
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{include\_graphics}\NormalTok{(}\StringTok{"dendogram.png"}\NormalTok{)}\CommentTok{\#the hand draw dendrogram is shown below}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=0.8\linewidth]{dendogram} \end{center}
+
+\textbf{Biological interpretation-}
+
+The hierarchical clustering clearly separates the hematopoietic
+i.e.~blood and skin-derived lineages.
+
+In the dendrogram, the skin cell types (TBSC, ABSC, MTAC, CLDC) form a
+distinct cluster that branches off independently from all blood-related
+cell types. This shows that global methylation profiles are sufficiently
+different to separate the two developmental systems. Within the
+hematopoietic branch, the clustering partially reflects the expected
+developmental succession. Early progenitors (HSC, MPP1, MPP2) remain
+closer to each other and merge before the committed immune lineages
+(CLP, CMP, GMP, B-cell, CD4, CD8, Granu, Mono). This agrees with the
+biological hierarchy, where multipotent progenitors differentiate into
+more specialized immune cells.
+
+However, the erythroid lineage (Eryth, EPro, EDif) does not follow the
+expected order from Figure 1. These cells cluster separately and at an
+early height due to their unusually low global methylation, which
+differs from the increasing-methylation trend seen in other blood cell
+types.
+
+\end{document}
